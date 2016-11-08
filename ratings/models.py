@@ -6,7 +6,7 @@ from django.contrib.auth.models import User # This might be good? -tr
 class Course(models.Model):
     name = models.CharField(max_length=200)
     course_code = models.CharField(max_length=200)
-    year = models.IntegerField()
+    year = models.DateField()
     lecturer = models.CharField(max_length=200)
     myCourses_link = models.URLField()
 
