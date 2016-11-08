@@ -1,0 +1,9 @@
+{% if course_list %}
+<ul>
+  {% for course in course_list %}
+  <li> <a href="/reviews/{{course.course_code}}/"> {{ course.name }} </a></li>
+  {% endfor %}
+</ul>
+{% else %}
+<p> No courses found </p>
+{% endif %}
