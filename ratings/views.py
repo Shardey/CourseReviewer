@@ -11,6 +11,10 @@ def results(request, course_code):
     response = "You have searched for the course %s"
     return HttpResponse(response % course_code)
 
+def loggedin(request):
+    return render_to_response('ratings/loggedin.html',
+                              {'username': request.user.username})
+
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
