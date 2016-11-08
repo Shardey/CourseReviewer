@@ -2,10 +2,10 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
-from django.core.context_processors import csrf
+from django.template.context_processors import csrf
 
 def index(request):
-    return HttpResponse("Hello, you are at ratings index.")
+    return render_to_response('ratings/index.html')
 
 def results(request, course_code):
     response = "You have searched for the course %s"
@@ -16,7 +16,7 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/accounts/register/complete')
+            return HttpResponseRedirect('/ratings/register/complete')
 
     else:
         form = UserCreationForm()
@@ -24,8 +24,7 @@ def register(request):
     token.update(csrf(request))
     token['form'] = form
 
-    return render_to_response('registration/registration_form.html', token)
+    return render_to_response('ratings/registration_form.html', token)
 
 def registration_complete(request):
-    return render_to_response('registration/registration_complete.html')
-
+    return render_to_response('ratings/registration_complete.html')

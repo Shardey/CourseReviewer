@@ -1,7 +1,11 @@
+<ul>
+    <li><a href="/ratings/register">register</a></li>
+</ul>
+
 {% if course_list %}
 <ul>
   {% for course in course_list %}
-  <li> <a href="/reviews/{{course.course_code}}/"> {{ course.name }} </a></li>
+  <li> <a href="/ratings/{{course.course_code}}/"> {{ course.name }} </a></li>
   {% endfor %}
 </ul>
 {% else %}

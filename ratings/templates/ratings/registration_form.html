@@ -1,0 +1,13 @@
+{% comment %} {% extends "index.html" %}
+{% block title %}Register{% endblock %}
+{% block content %} {% endcomment %}
+
+<h2>Registration</h2>
+
+<form action="/ratings/register/" method="post">{% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="Register" />
+    
+</form>
+
+{# {% endblock %} #}
