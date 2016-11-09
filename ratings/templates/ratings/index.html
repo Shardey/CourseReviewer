@@ -4,12 +4,72 @@
     <li><a href="/ratings/logout">logout</a></li>
 </ul>
 
-{% if course_list %}
-<ul>
-  {% for course in course_list %}
-  <li> <a href="/ratings/{{course.course_code}}/"> {{ course.name }} </a></li>
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Accordion - Default functionality</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( "#accordion" ).accordion();
+  } );
+  </script>
+</head>
+<body>
+
+
+
+
+<div id="accordion">
+    {% if course_list %}
+        {% for course in course_list %}
+  <h3>{{ course.name }} Overall Grade:
+            {% if review_list %}
+                 {{ count = 0 }}
+                 {{ sum = 0 }}
+                 {% for review in review_list %}
+                    {% if review.course_id == course.id %}
+                      {{ count = count+review.overall }}
+                        {{ sum = sum+1 }}
+                    {% endif %}
+                 {% endfor %}
+                 {% count/sum %}
+            {% else %}0
+            {% endif %}
+
+        {% endfor %}
+    {% else %}
+    {% endif %}
+
+  </h3>
+
+      <div>
+          <p>HELLO</p>
+      </div>
   {% endfor %}
-</ul>
 {% else %}
+
 <p> No courses found </p>
 {% endif %}
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+<style> #css
+
+
+
+    </style>

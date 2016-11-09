@@ -3,9 +3,42 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.template.context_processors import csrf
+from ratings.models import Course, Review
 
 def index(request):
-    return render_to_response('ratings/index.html')
+    course_list = Course.objects.all()
+    review_list = Review.objects.all()
+
+#### tästä jatketaan koska elämä on kivaa. seuraavaksi datatyyppi joka annetaan templatelle
+    for course in course_list:
+        comment_list = []
+    if review_list:
+        count = 0
+        sum = 0
+        for review in review_list:
+            if review.course_id == course.id:
+                count = count + review.overall
+                sum = sum + 1
+                comment_list.append(review.comments)
+
+
+        count / sum
+        comment_list
+    else '0'
+    endif
+
+
+
+
+
+
+
+    return render_to_response('ratings/index.html',{'course_list': Course.objects.all(),
+                                                    'review_list': Review.objects.all()})
+
+
+
+
 
 def results(request, course_code):
     response = "You have searched for the course %s"
