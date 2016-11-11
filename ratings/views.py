@@ -1,48 +1,58 @@
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.template.context_processors import csrf
 from ratings.models import Course, Review
 
+
 def index(request):
+    ####
+    # Make a list of courses based on search results and stuff it into course_list. Review list
+    # remains the list of all reviews. The averages will be calculated further below. --tr
+    
     course_list = Course.objects.all()
     review_list = Review.objects.all()
 
-#### tästä jatketaan koska elämä on kivaa. seuraavaksi datatyyppi joka annetaan templatelle
+    ####
+    # From Course: id,name,code,year,lecturer,myCourses_link
+    # From Review: overall, lectures, assignments, workload into ratings[]
+    # End result: name,code,year,lecturer,myCourses_link,overall,lectures,assignments,workload,comments[]
+    
+    # Because the end result of this system is that there are a lot more reviews
+    # than there are courses, the algorithm that runs through the reviews once
+    # runs faster than the one that runs through courses once.
+    # Running it this way makes the calculating the averages easier to read however.
+
+    course_list_final = [] # Init final list of course data along with reviews
+    
     for course in course_list:
-        comment_list = []
-    if review_list:
+        #initialize the base data and the review counter
+        course_data=[course.name,course.course_code,course.year,course.lecturer,course.myCourses_link,0,0,0,0,[]]
         count = 0
-        sum = 0
+
         for review in review_list:
-            if review.course_id == course.id:
-                count = count + review.overall
-                sum = sum + 1
-                comment_list.append(review.comments)
+            if course.id == review.course_id_id:
+                course_data[5] += review.overall
+                course_data[6] += review.lectures
+                course_data[7] += review.assignments
+                course_data[8] += review.workload
+                count += 1
+                if review.comments: # Don't add empty comments to the list
+                    course_data[9].append(review.comments)
 
+        if count != 0:         # And remember to calculate the average of the review stars here
+            course_data[5] /= count
+            course_data[6] /= count
+            course_data[7] /= count
+            course_data[8] /= count
+            
+        # Add the compiled course data into the final array we want to pass to the template
+        course_list_final.append(course_data)
+        
+    # Seems like the data is passed as an integer. This is fine for now. --tr
+    return render(request,'ratings/index.html',{'course_list_final': course_list_final})
 
-        count / sum
-        comment_list
-    else '0'
-    endif
-
-
-
-
-
-
-
-    return render_to_response('ratings/index.html',{'course_list': Course.objects.all(),
-                                                    'review_list': Review.objects.all()})
-
-
-
-
-
-def results(request, course_code):
-    response = "You have searched for the course %s"
-    return HttpResponse(response % course_code)
 
 def loggedin(request):
     return render_to_response('ratings/loggedin.html',
