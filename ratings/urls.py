@@ -13,6 +13,10 @@ urlpatterns = [
     # Registration URLs
     url(r'^register/$', views.register, name='register'),
     url(r'^register/complete/$', views.registration_complete, name='registration_complete'),
+    
+    # url(r'^home/$', views.home), 
+    url(r'^search/$', views.search, name='search'),
+    
     # /ratings/CS-C4000/
     # url(r'^(?P<course_code>[0-9a-zA-Z\-]*)/$', views.results, name='results'),
 ]
