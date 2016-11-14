@@ -1,25 +1,23 @@
-{% load static %}
-
-<!doctype html>
-<html lang="en">
-
 <ul>
     <li><a href="/ratings/register">register</a></li>
     <li><a href="/ratings/login">login</a></li>
     <li><a href="/ratings/logout">logout</a></li>
 </ul>
 
+<form action="index.html" method="post">
+  {% csrf_token %}
+  <input type="text" name="searchstring" value="">
+  <input type="submit" value="Search!">
+</form>
+
+<!doctype html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Course Ratings Site</title>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="/resources/demos/style.css">
-  <!--
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-  -->
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script>
@@ -27,29 +25,21 @@
     $( "#accordion" ).accordion();
   } );
   </script>
-  
-  <link href="https://fonts.googleapis.com/css?family=Catamaran" rel="stylesheet"> 
 </head>
 <body>
-
-  <form method="post" action="/ratings/">
-    {% csrf_token %}
-<input type="text" name="searchstring" placeholder="Search">
-<input type="submit" class="btn" value="Search" >
-</form>
-
 
 <!-- Data is in this structure:  
      course_list=[course.Name, course.Code, course.Year, course.Lecturer, course.myCourses_link,0,0,0,0,[c1,c2,c3...cn]] 
      course[0-4] = name, code, year, lecturer, myCourses_link
      course[5-8] = overall,lectures,assignments,workload
      course[9] = comments[]
+     course[10] = amount of reviews for this course
 -->
 
 
 <div id="accordion">
   {% for course in course_list_final %}
-  <h3>{{ course.0 }} Overall Grade: {{ course.5 }}</h3>
+  <h3>{{ course.0 }} ++++ Overall Grade: {{ course.5 }} ++++ (total reviews: {{ course.10 }} )</h3>
   <div>
     <table>
     <tr><td>Coursecode:</td><td> {{ course.1 }}</td>
