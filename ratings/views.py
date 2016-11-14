@@ -6,29 +6,28 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.template.context_processors import csrf
 from ratings.models import Course, Review
-from ratings.forms import SearchForm
+from ratings.forms import SearchForm, ReviewForm
 from django.db.models import Q
 
 def index(request):
     ####
     # Make a list of courses based on search results and stuff it into course_list.
     
-    course_list = Course.objects.all()
+    course_list = []
     user_review_list = []
     searchstring = []
     
     if (request.method == 'POST'): # We searched for a course
         form = SearchForm(request.POST)
         if form.is_valid():
-            # Check for SQL injection in the search string here? --tr
             
             searchstring = form.cleaned_data['searchstring']
             course_list = Course.objects.filter(Q(name__contains=searchstring) | Q(course_code__contains=searchstring) | Q(lecturer__contains=searchstring))
             if (request.user):
                 user_review_list = Review.objects.filter(user__exact=request.user)
         else:
-            course_list = []
-
+            course_list = Course.objects.all()
+            
     
 
     ####
@@ -45,34 +44,35 @@ def index(request):
     
     for course in course_list:
         #initialize the base data and the review counter
-        course_data=[course.name,course.course_code,course.year,course.lecturer,course.myCourses_link,0,0,0,0,[],0]
+        course_data=[course.id,course.name,course.course_code,course.year,course.lecturer,course.myCourses_link,0,0,0,0,[],0]
         count = 0
         
         review_list = Review.objects.filter(course_id__exact=course.id)
         for review in review_list:
             if course.id == review.course_id_id:
-                course_data[5] += review.overall
-                course_data[6] += review.lectures
-                course_data[7] += review.assignments
-                course_data[8] += review.workload
+                course_data[6] += review.overall
+                course_data[7] += review.lectures
+                course_data[8] += review.assignments
+                course_data[9] += review.workload
                 count += 1
                 if review.comments: # Don't add empty comments to the list
-                    course_data[9].append(review.comments)
+                    course_data[10].append(review.comments)
 
         if count != 0:         # And remember to calculate the average of the review stars here
-            course_data[5] /= count
             course_data[6] /= count
             course_data[7] /= count
             course_data[8] /= count
+            course_data[9] /= count
             
-        course_data[10] = count
+        course_data[11] = count
         # Add the compiled course data into the final array we want to pass to the template
         course_list_final.append(course_data)
         
     # Seems like the data is passed as integers. This is fine for now, likely need floats later. --tr
     return render(request,'ratings/index.html',{'course_list_final': course_list_final,
                                                 'user_review_list': user_review_list,
-                                                'searchstring': searchstring})
+                                                'searchstring': searchstring,
+                                                'add_review_form': ReviewForm()})
 
 
 
@@ -84,8 +84,22 @@ def index(request):
 def add_review(request):
     if (request.method=='POST'):
         form = ReviewForm(request.POST)
-    
-    return render(request,'ratings/index.html')
+        if form.is_valid():
+            new_review = Review(course_id = form.cleaned_data['course_id'],
+                                user = form.cleaned_data['user'],
+                                overall = form.cleaned_data['overall'],
+                                lectures = form.cleaned_data['lectures'],
+                                assignments = form.cleaned_data['assignments'],
+                                workload = form.cleaned_data['workload'],
+                                comments = form.cleaned_data['comments'])
+            new_review.save()
+        else:
+            # error in submitting the form
+            pass
+    else:
+        form = ReviewForm()
+    return render(request,'ratings/index.html',{'searchstring': form.cleaned_data['searchstring'],
+                                                'form': form})
 
 
 

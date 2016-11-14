@@ -7,6 +7,7 @@ urlpatterns = [
     # /ratings/
     url(r'^$', views.index, name='index'),
     url(r'^index.html$', views.index, name='index'),
+    url(r'^add_review/$', views.add_review, name='add_review'),
     # Auth-related URLs:
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, name='logout'),

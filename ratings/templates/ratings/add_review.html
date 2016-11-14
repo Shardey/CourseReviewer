@@ -1,0 +1,8 @@
+<html>
+  <h2> Add a new review </h2>
+  <form action="/add_review/" method = "post">
+    <input type ="hidden" name="searchstring" value="{{ searchstring }}" >
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit" />
+</html>
