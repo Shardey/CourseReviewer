@@ -1,7 +1,9 @@
+from __future__ import division # Python 2.7 divides integers as integer so this is needed (Aalto default python is 2.7) --tr
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 from django.template.context_processors import csrf
 from ratings.models import Course, Review
 from ratings.forms import SearchForm
@@ -67,14 +69,21 @@ def index(request):
         # Add the compiled course data into the final array we want to pass to the template
         course_list_final.append(course_data)
         
-    # Seems like the data is passed as an integer. This is fine for now. --tr
+    # Seems like the data is passed as integers. This is fine for now, likely need floats later. --tr
     return render(request,'ratings/index.html',{'course_list_final': course_list_final,
                                                 'user_review_list': user_review_list,
                                                 'searchstring': searchstring})
 
-def add_review(request):
-    # The forms that add a review will toss the form here
 
+
+####
+# This view adds a new review or updates the old review if the user already had
+# reviewed this course. One review per user/course combination.
+# Requires the user to be logged in.
+@login_required
+def add_review(request):
+    if (request.method=='POST'):
+        form = ReviewForm(request.POST)
     
     return render(request,'ratings/index.html')
 
