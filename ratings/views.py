@@ -20,7 +20,7 @@ def index(request):
             # Check for SQL injection in the search string here? --tr
             
             searchstring = form.cleaned_data['searchstring']
-            course_list = Course.objects.filter(Q(name__contains=searchstring) | Q(course_code__contains=searchstring))
+            course_list = Course.objects.filter(Q(name__contains=searchstring) | Q(course_code__contains=searchstring) | Q(lecturer__contains=searchstring))
         else:
             course_list = []
 

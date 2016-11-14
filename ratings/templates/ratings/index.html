@@ -23,12 +23,12 @@
 </head>
 <body>
 
-<form method="get" action="/ratings/search/" class="navbar-form pull-right">
-<input type="text" id="searchBox" class="input-medium search-query" name="q" placeholder="Search">
+  <form method="post" action="/ratings/">
+    {% csrf_token %}
+<input type="text" name="searchstring" placeholder="Search">
 <input type="submit" class="btn" value="Search" >
 </form>
 
-<div>You searched for: {{ query }} </div>
 
 <!-- Data is in this structure:  
      course_list=[course.Name, course.Code, course.Year, course.Lecturer, course.myCourses_link,0,0,0,0,[c1,c2,c3...cn]] 
