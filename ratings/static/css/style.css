@@ -1,0 +1,24 @@
+li a {
+    color: green;
+    background-color: green;
+}
+
+body {
+    padding-left: 20px;
+    padding-right: 20px;
+    
+    font-family: 'Catamaran', sans-serif;
+}
+
+h3 a {
+    color: #FCA205;
+}
+
+form {
+    color: #FCA205;
+}
+
+h1 a {
+    color: #FCA205;
+    font-family: 'Lobster';
+}
