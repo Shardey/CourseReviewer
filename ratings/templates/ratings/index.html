@@ -3,18 +3,6 @@
 <!doctype html>
 <html lang="en">
 
-<ul>
-    <li><a href="/ratings/">Home page</a></li>
-    
-    {% if request.user.is_authenticated == false %}
-        <li id="userAction"><a href="/ratings/register">register</a></li>
-        <li id="userAction"><a href="/ratings/login">login</a></li>
-    {% else %}
-        <li id="userAction"><a href="/ratings/logout">logout</a></li>
-        <li id="userAction"><a href="/ratings/logout">{{request.user}}</a></li>
-    {% endif %}
-</ul>
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,12 +13,12 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
     -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'ratings/style.css' %}">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         $( function() {
-            $( "#accordion" ).accordion();
+            $("#accordion").accordion({ header: "h3", collapsible: true, active: false });
         } );
     </script>
   
@@ -39,19 +27,40 @@
 
 <body>
 
-<form method="post" action="/ratings/">
-    {% csrf_token %}
-    <div id="searchfield">
-    {% if not request.searchstring %}
-        <input type="text" name="searchstring" placeholder="Search">
+<div class="navbar">
+<ul>
+    <li id="homePage"><a href="/ratings/">Home page</a></li>
+    
+    {% if request.user.is_authenticated %}
+        <li class="userAction" id="logout"><a href="/ratings/logout">logout</a></li>
+        <li class="userAction" id="userName"><a>Welcome, {{request.user}}</a></li>
     {% else %}
-        <input type="text" name="searchstring" placeholder={{request.searchstring}}>
+        <li class="userAction" id="register"><a href="/ratings/register">register</a></li>
+        <li class="userAction" id="login"><a href="/ratings/login">login</a></li>
     {% endif %}
+</ul>
+</div>
+
+<div class="container">
+    <div class="center">
+        <h1>Find the best courses!</h1>
     </div>
-    <button id="submitButton" style="vertical-align:middle" type="submit" class="button">
-        <span>Search</span>
-    </button>
-</form>
+    
+    <form method="post" action="/ratings/">
+        {% csrf_token %}
+        <div class="center" id="searchfield">
+            {% if not searchstring %}
+                <input type="text" name="searchstring" placeholder="Courses, lecturers or course codes">
+            {% else %}
+                <input type="text" name="searchstring" placeholder="Searching for: {{searchstring}}">
+            {% endif %}
+        </div>
+        <div class="center" id="buttonfield">
+            <button id="submitButton" style="vertical-align:middle" type="submit" class="button">
+                <span>Search</span>
+            </button>
+        </div>
+    </form>
 
 <!-- Data is in this structure:  
      course_list=[course.Name, course.Code, course.Year, course.Lecturer, course.myCourses_link,0,0,0,0,[c1,c2,c3...cn]] 
@@ -61,27 +70,28 @@
      course[10] = amount of reviews for this course
 -->
 
-<div id="accordion">
-    {% for course in course_list_final %}
-        <h3>{{ course.0 }} Overall Grade: {{ course.5 }}</h3>
-        <div>
-            <table>
-                <tr><td>Coursecode:</td><td> {{ course.1 }}</td>
-                <tr><td>Start Date:</td><td> {{ course.2 }}</td>
-                <tr><td>Lecturer:</td><td> {{ course.3 }}</td>
-                <tr><td>MyCourses Link:</td><td> {{ course.4 }}</td>
-            </table>
-            <table>
-                <tr><td>Lectures</td><td>{{ course.6 }}</td></tr>
-                <tr><td>Assignments</td><td> {{ course.7 }}</td></tr>
-                <tr><td>Workload</td><td> {{ course.8 }}</td></tr>
-            </table>
-            {% for comment in course.9 %}
-                <p>{{ comment }}</p>
-            {% endfor %}
-        </div>  
-    {% endfor %}
-</div>
+    <div class="center" id="accordion">
+        {% for course in course_list_final %}
+            <h3>{{ course.0 }} Overall Grade: {{ course.5 }}</h3>
+            <div>
+                <table>
+                    <tr><td>Coursecode:</td><td> {{ course.1 }}</td>
+                    <tr><td>Start Date:</td><td> {{ course.2 }}</td>
+                    <tr><td>Lecturer:</td><td> {{ course.3 }}</td>
+                    <tr><td>MyCourses Link:</td><td> {{ course.4 }}</td>
+                </table>
+                <table>
+                    <tr><td>Lectures</td><td>{{ course.6 }}</td></tr>
+                    <tr><td>Assignments</td><td> {{ course.7 }}</td></tr>
+                    <tr><td>Workload</td><td> {{ course.8 }}</td></tr>
+                </table>
+                {% for comment in course.9 %}
+                    <p>{{ comment }}</p>
+                {% endfor %}
+            </div>  
+        {% endfor %}
+    </div>
 
+</div>
 </body>
 </html>
