@@ -1,7 +1,9 @@
+from __future__ import division # Python 2.7 divides integers as integer so this is needed (Aalto default python is 2.7) --tr
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 from django.template.context_processors import csrf
 from ratings.models import Course, Review
 from ratings.forms import SearchForm
@@ -9,10 +11,11 @@ from django.db.models import Q
 
 def index(request):
     ####
-    # Make a list of courses based on search results and stuff it into course_list. Review list
-    # remains the list of all reviews. The averages will be calculated further below. --tr
-    review_list = Review.objects.all()
+    # Make a list of courses based on search results and stuff it into course_list.
+    
     course_list = Course.objects.all()
+    user_review_list = []
+    searchstring = []
     
     if (request.method == 'POST'): # We searched for a course
         form = SearchForm(request.POST)
@@ -21,6 +24,8 @@ def index(request):
             
             searchstring = form.cleaned_data['searchstring']
             course_list = Course.objects.filter(Q(name__contains=searchstring) | Q(course_code__contains=searchstring) | Q(lecturer__contains=searchstring))
+            if (request.user):
+                user_review_list = Review.objects.filter(user__exact=request.user)
         else:
             course_list = []
 
@@ -42,7 +47,8 @@ def index(request):
         #initialize the base data and the review counter
         course_data=[course.name,course.course_code,course.year,course.lecturer,course.myCourses_link,0,0,0,0,[],0]
         count = 0
-
+        
+        review_list = Review.objects.filter(course_id__exact=course.id)
         for review in review_list:
             if course.id == review.course_id_id:
                 course_data[5] += review.overall
@@ -63,8 +69,24 @@ def index(request):
         # Add the compiled course data into the final array we want to pass to the template
         course_list_final.append(course_data)
         
-    # Seems like the data is passed as an integer. This is fine for now. --tr
-    return render(request,'ratings/index.html',{'course_list_final': course_list_final})
+    # Seems like the data is passed as integers. This is fine for now, likely need floats later. --tr
+    return render(request,'ratings/index.html',{'course_list_final': course_list_final,
+                                                'user_review_list': user_review_list,
+                                                'searchstring': searchstring})
+
+
+
+####
+# This view adds a new review or updates the old review if the user already had
+# reviewed this course. One review per user/course combination.
+# Requires the user to be logged in.
+@login_required
+def add_review(request):
+    if (request.method=='POST'):
+        form = ReviewForm(request.POST)
+    
+    return render(request,'ratings/index.html')
+
 
 
 def loggedin(request):
