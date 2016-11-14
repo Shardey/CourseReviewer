@@ -25,35 +25,38 @@
 
   <form method="post" action="/ratings/">
     {% csrf_token %}
-<input type="text" name="searchstring" placeholder="Search">
-<input type="submit" class="btn" value="Search" >
-</form>
-
+    <input type="text" name="searchstring" placeholder="Search">
+    <input type="submit" class="btn" value="Search" >
+  </form>
 
 <!-- Data is in this structure:  
-     course_list=[course.Name, course.Code, course.Year, course.Lecturer, course.myCourses_link,0,0,0,0,[c1,c2,c3...cn]] 
-     course[0-4] = name, code, year, lecturer, myCourses_link
-     course[5-8] = overall,lectures,assignments,workload
-     course[9] = comments[]
+     course_list_final = [course.id, course.Name, course.Code, course.Year, course.Lecturer, course.myCourses_link,0,0,0,0,[c1,c2,c3...cn],0] 
+     course[0-5] = id, name, code, year, lecturer, myCourses_link
+
+     course[6-9] = overall,lectures,assignments,workload
+     course[10]   = comments[]
+     course[11]  = amount of reviews for this course
+
+     Users own reviews:
+     user_review_list[]
+     list of Review-class objects: course_id_id, user, overall, lectures, assignments, workload, comments
 -->
-
-
 <div id="accordion">
   {% for course in course_list_final %}
-  <h3>{{ course.0 }} Overall Grade: {{ course.5 }}</h3>
+  <h3>{{ course.1 }} Overall Grade: {{ course.6 }} {% for review in user_review_list %} {% if course.0 == review.course_id_id %} <td>My Review:</td><td>{{ review.overall }}</td> {% endif %}  {% endfor %} </h3>
   <div>
     <table>
-    <tr><td>Coursecode:</td><td> {{ course.1 }}</td>
-    <tr><td>Start Date:</td><td> {{ course.2 }}</td>
-    <tr><td>Lecturer:</td><td> {{ course.3 }}</td>
-    <tr><td>MyCourses Link:</td><td> {{ course.4 }}</td>
+    <tr><td>Coursecode:</td><td> {{ course.2 }}</td>
+    <tr><td>Start Date:</td><td> {{ course.3 }}</td>
+    <tr><td>Lecturer:</td><td> {{ course.4 }}</td>
+    <tr><td>MyCourses Link:</td><td> {{ course.5 }}</td>
     </table>
     <table>
-      <tr><td>Lectures</td><td>{{ course.6 }}</td></tr>
-      <tr><td>Assignments</td><td> {{ course.7 }}</td></tr>
-      <tr><td>Workload</td><td> {{ course.8 }}</td></tr>
+      <tr><td>Lectures</td><td>{{ course.7 }}</td> {% for review in user_review_list %} {% if course.0 == review.course_id_id %} <td>My Review:</td><td>{{ review.lectures }}</td> {% endif %}  {% endfor %}</tr>
+      <tr><td>Assignments</td><td> {{ course.8 }}</td> {% for review in user_review_list %} {% if course.0 == review.course_id_id %} <td>My Review:</td><td>{{ review.assignments }}</td> {% endif %}  {% endfor %}</tr>
+      <tr><td>Workload</td><td> {{ course.9 }}</td> {% for review in user_review_list %} {% if course.0 == review.course_id_id %} <td>My Review:</td><td>{{ review.workload }}</td> {% endif %}  {% endfor %}</tr>
     </table>
-    {% for comment in course.9 %}
+    {% for comment in course.10 %}
     <p>{{ comment }}</p>
     {% endfor %}
   </div>  
