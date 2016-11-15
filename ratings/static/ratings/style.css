@@ -31,13 +31,19 @@ li {
 }
 
 h1 {
-    padding-top: 150px;
-    padding-bottom: 60px;
-    color: #2B2B2B;
-    font-size: 250%;
+    padding-top: 120px;
+    padding-bottom: 30px;
+    color: #FFFAFA;
+    font-size: 350%;
     text-align: center;
-    text-shadow: #DE1B1B 1px 1px 1px;
+    text-shadow: ;
 }
+
+
+    .startdate {
+        text-align: right;
+    }
+
 
 li a {
     display: block;
@@ -94,6 +100,36 @@ input {
     font-size: 140%;
 }
 
+
+  .rating {
+      overflow: hidden;
+      display: inline-block;
+  }
+  .rating-input {
+      float: right;
+      width: 16px;
+      height: 16px;
+      padding: 0;
+      margin: 0 0 0 -16px;
+      opacity: 0;
+
+  }
+.rating:hover .rating-star:hover,
+.rating:hover .rating-star:hover ~ .rating-star,
+.rating-input:checked ~ .rating-star {
+    background-position: 0 0;
+}
+.rating-star,
+.rating:hover .rating-star {
+    position: relative;
+    float: right;
+    display: block;
+    width: 16px;
+    height: 16px;
+    background: url('http://kubyshkin.ru/samples/star-rating/star.png') 0 -16px;
+}
+
+
 .center {
     margin: auto;
 }
@@ -106,12 +142,13 @@ input {
 #buttonfield {
     padding: 20px;
     text-align: center;
+
 }
 
 #submitButton {
     display: inline-block;
     border-radius: 4px;
-    background-color: #E9E581;
+    background-color: #FFFFFF;
     color: #2B2B2B;
     text-align: center;
     font-size: 28px;
@@ -148,7 +185,7 @@ input {
 
 #accordion {
     max-width: 1200px;
-    background-color: #F6F6F6;
+    background-color: #FFFFFF;
     padding: 1px 2px 2px 2px;
     border-radius: 4px;
 }
