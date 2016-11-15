@@ -23,7 +23,7 @@ def index(request):
             
             searchstring = form.cleaned_data['searchstring']
             course_list = Course.objects.filter(Q(name__contains=searchstring) | Q(course_code__contains=searchstring) | Q(lecturer__contains=searchstring))
-            if (request.user):
+            if (request.user.is_authenticated):
                 user_review_list = Review.objects.filter(user__exact=request.user)
         else:
             course_list = Course.objects.all()
