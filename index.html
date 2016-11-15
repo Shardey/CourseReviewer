@@ -1,0 +1,182 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Course Ratings Site</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <!--
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    -->
+    <link rel="stylesheet" href="{% static 'ratings/style.css' %}">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $( function() {
+            $("#accordion").accordion({ header: "h3", collapsible: true, active: false });
+        } );
+    </script>
+  
+    <link href="https://fonts.googleapis.com/css?family=Catamaran" rel="stylesheet"> 
+</head>
+
+<body>
+
+<div class="navbar">
+<ul>
+    <li id="homePage"><a href="/ratings/">Home page</a></li>
+    
+    {% if request.user.is_authenticated %}
+        <li class="userAction" id="logout"><a href="/ratings/logout">logout</a></li>
+        <li class="userAction" id="userName"><a>Welcome, {{request.user}}</a></li>
+    {% else %}
+        <li class="userAction" id="register"><a href="/ratings/register">register</a></li>
+        <li class="userAction" id="login"><a href="/ratings/login">login</a></li>
+    {% endif %}
+</ul>
+</div>
+
+<div class="container">
+    <div class="center">
+        <h1>Aalto Course Reviewer</h1>
+    </div>
+
+    <form method="post" action="/ratings/">
+        {% csrf_token %}
+        <div class="center" id="searchfield">
+            {% if not searchstring %}
+                <input type="text" name="searchstring" placeholder="Courses, lecturers or course codes">
+            {% else %}
+                <input type="text" name="searchstring" placeholder="Searching for: {{searchstring}}">
+            {% endif %}
+        </div>
+        <div class="center" id="buttonfield">
+            <button id="submitButton" style="vertical-align:middle" type="submit" class="button">
+                <span>Search</span>
+            </button>
+        </div>
+    </form>
+
+<!-- Data is in this structure:  
+     course_list_final = [course.id, course.Name, course.Code, course.Year, course.Lecturer, course.myCourses_link,0,0,0,0,[c1,c2,c3...cn],0] 
+     course[0-5] = id, name, code, year, lecturer, myCourses_link
+
+     course[6-9] = overall,lectures,assignments,workload
+     course[10]   = comments[]
+     course[11]  = amount of reviews for this course
+
+     Users own reviews:
+     user_review_list[]
+     list of Review-class objects: course_id_id, user, overall, lectures, assignments, workload, comments
+-->
+    <div class="center" id="accordion">
+        {% for course in course_list_final %}
+        <h3>{{ course.1 }} ({{ course.3 }}) <div class="startdate"> Overall Grade: {{ course.6 }}
+
+
+
+
+
+
+
+
+
+        </div> {% for review in user_review_list %} {% if course.0 == review.course_id_id %} My Review:{{ review.overall }}  {% endif %}  {% endfor %} </h3>
+
+
+        <div>
+            <table>
+                <tr><td>Coursecode:</td><td> {{ course.2 }}</td>
+                <tr><td>Start Date:</td><td> {{ course.3 }}</td>
+                <tr><td>Lecturer:</td><td> {{ course.4 }}</td>
+                <tr><td>MyCourses Link:</td><td> {{ course.5 }}</td>
+            </table>
+            <table>
+                <tr><td>Lectures</td><td>{{ course.7 }}
+                <span class="rating">
+    <input type="radio" class="rating-input"
+        id="rating-input-1-5" name="lecture" value="1" {% if course.7 == "1" %} checked {% endif %}>
+    <label for="rating-input-1-5" class="rating-star"></label>
+    <input type="radio" class="rating-input"
+        id="rating-input-1-4" name="lecture" value="2" {% if course.7 == "2" %} checked {% endif %}>
+    <label for="rating-input-1-4" class="rating-star"></label>
+    <input type="radio" class="rating-input"
+        id="rating-input-1-3" name="lecture" value="3" {% if course.7 == "3" %} checked {% endif %}>
+    <label for="rating-input-1-3" class="rating-star"></label>
+    <input type="radio" class="rating-input"
+        id="rating-input-1-2" name="lecture" value="4" {% if course.7 == "4" %} checked {% endif %}>
+    <label for="rating-input-1-2" class="rating-star"></label>
+    <input type="radio" class="rating-input"
+        id="rating-input-1-1" name="lecture" value="5" {% if course.7 == "5" %} checked {% endif %}>
+    <label for="rating-input-1-1" class="rating-star"></label>
+        </span>
+                </td> {% for review in user_review_list %} {% if course.0 == review.course_id_id %} <td>My Review:</td><td>{{ review.lectures }}</td> {% endif %}  {% endfor %}</tr>
+
+
+
+
+                <tr><td>Assignments</td><td> {{ course.8 }}
+                                    <span class="rating">
+    <input type="radio" class="rating-input"
+        id="rating-input-1-5" name="assignment">
+    <label for="rating-input-1-5" class="rating-star"></label>
+    <input type="radio" class="rating-input"
+        id="rating-input-1-4" name="assignment">
+    <label for="rating-input-1-4" class="rating-star"></label>
+    <input type="radio" class="rating-input"
+        id="rating-input-1-3" name="assignment">
+    <label for="rating-input-1-3" class="rating-star"></label>
+    <input type="radio" class="rating-input"
+        id="rating-input-1-2" name="assignment">
+    <label for="rating-input-1-2" class="rating-star"></label>
+    <input type="radio" class="rating-input"
+        id="rating-input-1-1" name="assignment">
+    <label for="rating-input-1-1" class="rating-star"></label>
+        </span>
+                </td> {% for review in user_review_list %} {% if course.0 == review.course_id_id %} <td>My Review:</td><td>{{ review.assignments }}</td> {% endif %}  {% endfor %}</tr>
+
+
+                <tr><td>Workload</td><td> {{ course.9 }}
+                <span class="rating">
+    <input type="radio" class="rating-input"
+        id="rating-input-1-5" name="overall">
+    <label for="rating-input-1-5" class="rating-star"></label>
+    <input type="radio" class="rating-input"
+        id="rating-input-1-4" name="overall">
+    <label for="rating-input-1-4" class="rating-star"></label>
+    <input type="radio" class="rating-input"
+        id="rating-input-1-3" name="overall">
+    <label for="rating-input-1-3" class="rating-star"></label>
+    <input type="radio" class="rating-input"
+        id="rating-input-1-2" name="overall">
+    <label for="rating-input-1-2" class="rating-star"></label>
+    <input type="radio" class="rating-input"
+        id="rating-input-1-1" name="overall">
+    <label for="rating-input-1-1" class="rating-star"></label>
+        </span>
+                </td> {% for review in user_review_list %} {% if course.0 == review.course_id_id %} <td>My Review:</td><td>{{ review.workload }}</td> {% endif %}  {% endfor %}</tr>
+
+
+
+
+
+
+
+            </table>
+            {% for comment in course.10 %}
+            <p>{{ comment }}</p>
+            {% endfor %}
+        </div>  
+        {% endfor %}
+    </div>
+
+</div>
+</body>
+</html>
+
+

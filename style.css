@@ -1,0 +1,192 @@
+body {
+    font-family: 'Catamaran', sans-serif;
+    margin: 0;
+    background: #F6F6F6 url("study-background.jpg") no-repeat center top;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.navbar {
+    background-color: #2B2B2B;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+ul {
+    list-style-type: none;
+    margin: auto;
+    overflow: hidden;
+    padding: 0 4.16667%;
+}
+
+li {
+    float: left;
+}
+
+.container {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+h1 {
+    padding-top: 120px;
+    padding-bottom: 30px;
+    color: #FFFAFA;
+    font-size: 350%;
+    text-align: center;
+    text-shadow: ;
+}
+
+
+    .startdate {
+        text-align: right;
+    }
+
+
+li a {
+    display: block;
+    text-align: center;
+    padding: 16px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #DE1B1B;
+}
+
+li:last-child {
+    border-right: 5px solid #2B2B2B;
+}
+
+a, a:visited, a:hover, a:active {
+  color: inherit;
+}
+
+.userAction {
+    float: right;
+}
+
+#logout {
+    background-color: #E9E581;
+    color: #2B2B2B;
+}
+
+#register {
+    background-color: #E9E581;
+    color: #2B2B2B;
+}
+
+#login {
+    background-color: #F6F6F6;
+    color: #2B2B2B;
+}
+
+#homePage {
+    color: #F6F6F6;
+}
+
+#userName {
+    color: #F6F6F6;
+}
+
+input {
+    width: 100%;
+    height: 100%;
+    text-align: center;    
+    border: 1px solid;
+    border-radius: 4px;
+    font-size: 140%;
+}
+
+
+  .rating {
+      overflow: hidden;
+      display: inline-block;
+  }
+  .rating-input {
+      float: right;
+      width: 16px;
+      height: 16px;
+      padding: 0;
+      margin: 0 0 0 -16px;
+      opacity: 0;
+
+  }
+.rating:hover .rating-star:hover,
+.rating:hover .rating-star:hover ~ .rating-star,
+.rating-input:checked ~ .rating-star {
+    background-position: 0 0;
+}
+.rating-star,
+.rating:hover .rating-star {
+    position: relative;
+    float: right;
+    display: block;
+    width: 16px;
+    height: 16px;
+    background: url('http://kubyshkin.ru/samples/star-rating/star.png') 0 -16px;
+}
+
+
+.center {
+    margin: auto;
+}
+
+#searchfield {
+    width: 50%;
+    height: 50px;
+}
+
+#buttonfield {
+    padding: 20px;
+    text-align: center;
+
+}
+
+#submitButton {
+    display: inline-block;
+    border-radius: 4px;
+    background-color: #FFFFFF;
+    color: #2B2B2B;
+    text-align: center;
+    font-size: 28px;
+    padding: 20px;
+    width: 200px;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+#submitButton span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+#submitButton span:after {
+  content: '»';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+#submitButton:hover span {
+  padding-right: 25px;
+}
+
+#submitButton:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+#accordion {
+    max-width: 1200px;
+    background-color: #FFFFFF;
+    padding: 1px 2px 2px 2px;
+    border-radius: 4px;
+}
+
