@@ -33,7 +33,7 @@
     
     {% if request.user.is_authenticated %}
         <li class="userAction" id="logout"><a href="/ratings/logout">logout</a></li>
-        <li class="userAction" id="userName"><a>Welcome, {{request.user}}</a></li>
+        <li class="userAction unselectable" id="userName"><a>Welcome, {{request.user}}</a></li>
     {% else %}
         <li class="userAction" id="register"><a href="/ratings/register">register</a></li>
         <li class="userAction" id="login"><a href="/ratings/login">login</a></li>
@@ -43,9 +43,9 @@
 
 <div class="container">
     <div class="center">
-        <h1>Aalto Course Reviewer</h1>
+        <h1 class="unselectable">Aalto Course Reviewer</h1>
     </div>
-
+    
     <form method="post" action="/ratings/">
         {% csrf_token %}
         <div class="center" id="searchfield">
@@ -176,6 +176,7 @@
     </div>
 
 </div>
+
 </body>
 </html>
 

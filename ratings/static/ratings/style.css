@@ -39,11 +39,16 @@ h1 {
     text-shadow: ;
 }
 
+.unselectable {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 
-    .startdate {
-        text-align: right;
-    }
-
+.startdate {
+    text-align: right;
+}
 
 li a {
     display: block;

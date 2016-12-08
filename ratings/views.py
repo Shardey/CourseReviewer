@@ -104,8 +104,11 @@ def add_review(request):
 
 
 def loggedin(request):
-    return render_to_response('ratings/loggedin.html',
+    if 'login' in request.POST:
+        return render_to_response('ratings/index.html',
                               {'username': request.user.username})
+    else:
+        return render_to_response('ratings/index.html')
 
 def register(request):
     if request.method == 'POST':
