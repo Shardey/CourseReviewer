@@ -1,12 +1,20 @@
-{% comment %} {% extends "index.html" %}
-{% block title %}Log In{% endblock %}
-{% block content %} {% endcomment %}
+{% extends "ratings/base.html" %}
 
-<h2>Login</h2>
-    <form method="post">
+{% block method_content %}
+
+<body>
+    <form method="post" class="informationForm">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Login</button>
+        <button class="button submitButton" style="vertical-align:middle" type="submit">
+            <span>Login</span>
+        </button>
     </form>
+    
+    <div class="cancelLink">
+        <a href="/ratings/">Browse without login</a>
+    </div>
 
-{# {% endblock %} #}
+</body>
+
+{% endblock method_content %}

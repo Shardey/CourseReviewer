@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^add_review/$', views.add_review, name='add_review'),
     # Auth-related URLs:
     url(r'^login/$', auth_views.login, name='login'),
-    url(r'^logout/$', auth_views.logout, name='logout'),
+    url(r'^logout/$', views.logout, name='logout'),
     url(r'^loggedin/$', views.loggedin, name='loggedin'),
     # Registration URLs
     url(r'^register/$', views.register, name='register'),

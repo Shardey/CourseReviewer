@@ -36,7 +36,7 @@ h1 {
     color: #FFFAFA;
     font-size: 350%;
     text-align: center;
-    text-shadow: ;
+    text-shadow: 2px 2px #2B2B2B;
 }
 
 .unselectable {
@@ -150,10 +150,10 @@ input {
 
 }
 
-#submitButton {
+.submitButton {
     display: inline-block;
     border-radius: 4px;
-    background-color: #FFFFFF;
+    background-color: #E9E581;
     color: #2B2B2B;
     text-align: center;
     font-size: 28px;
@@ -163,14 +163,14 @@ input {
     cursor: pointer;
 }
 
-#submitButton span {
+.submitButton span {
   cursor: pointer;
   display: inline-block;
   position: relative;
   transition: 0.5s;
 }
 
-#submitButton span:after {
+.submitButton span:after {
   content: '»';
   position: absolute;
   opacity: 0;
@@ -179,11 +179,11 @@ input {
   transition: 0.5s;
 }
 
-#submitButton:hover span {
+.submitButton:hover span {
   padding-right: 25px;
 }
 
-#submitButton:hover span:after {
+.submitButton:hover span:after {
   opacity: 1;
   right: 0;
 }
@@ -195,3 +195,32 @@ input {
     border-radius: 4px;
 }
 
+h2 {
+    color: #214425
+}
+
+.informationForm {
+    text-align: center;
+    max-width: 300px;
+    float: center;
+    margin: auto;
+    padding-top: 100px;
+}
+
+.informationForm input {
+    height: 50px;
+}
+
+.informationForm label {
+    color: #FFFAFA;
+    text-shadow: 2px 2px #2B2B2B;
+    font-size: 28px;
+}
+
+.cancelLink {
+    text-align: center;
+    padding-top: 35px;
+    font-size: 17px;
+    color: #FFFAFA;
+    text-shadow: 2px 2px #2B2B2B;
+}

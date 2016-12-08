@@ -8,6 +8,7 @@ from django.template.context_processors import csrf
 from ratings.models import Course, Review
 from ratings.forms import SearchForm, ReviewForm
 from django.db.models import Q
+from django.contrib.auth import views as auth_views
 
 def index(request):
     ####
@@ -87,7 +88,7 @@ def index(request):
     # Seems like the data is passed as integers. This is fine for now, likely need floats later. --tr
     return render(request,'ratings/index.html',{'course_list_final': course_list_final,
                                                 'searchstring': searchstring,
-                                                'add_review_form': ReviewForm()})
+                                                'add_review_form': ReviewForm(),})
 
 
 
@@ -137,8 +138,10 @@ def loggedin(request):
     if 'login' in request.POST:
         return render_to_response('ratings/index.html',
                               {'username': request.user.username})
-    else:
-        return render_to_response('ratings/index.html')
+        
+def logout(request):
+    auth_views.logout(request)
+    return render(request, 'ratings/index.html')
 
 def register(request):
     if request.method == 'POST':

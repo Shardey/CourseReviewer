@@ -1,0 +1,47 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Course Ratings Site</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <!--
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    -->
+    <link rel="stylesheet" href="{% static 'ratings/style.css' %}">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $( function() {
+            $("#accordion").accordion({ header: "h3", collapsible: true, active: false });
+        } );
+    </script>
+  
+    <link href="https://fonts.googleapis.com/css?family=Catamaran" rel="stylesheet"> 
+</head>
+
+<body>
+
+<div class="navbar">
+<ul>
+    <li id="homePage"><a href="/ratings/">Home page</a></li>
+    
+    {% if request.user.is_authenticated %}
+        <li class="userAction" id="logout"><a href="/ratings/logout">logout</a></li>
+        <li class="userAction unselectable" id="userName"><a>Welcome, {{request.user}}</a></li>
+    {% else %}
+        <li class="userAction" id="register"><a href="/ratings/register">register</a></li>
+        <li class="userAction" id="login"><a href="/ratings/login">login</a></li>
+    {% endif %}
+</ul>
+</div>
+
+{% block method_content %}{% endblock method_content %}
+
+</body>
+</html>
