@@ -1,6 +1,6 @@
 from __future__ import division # Python 2.7 divides integers as integer so this is needed (Aalto default python is 2.7) --tr
 from django.http import HttpResponse
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render_to_response, render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
@@ -8,7 +8,6 @@ from django.template.context_processors import csrf
 from ratings.models import Course, Review
 from ratings.forms import SearchForm, ReviewForm
 from django.db.models import Q
-from django.contrib.auth import views as auth_views
 
 def index(request):
     ####
@@ -70,7 +69,7 @@ def index(request):
                     if review.comments:
                         my_review[4].append(review.comments)
                 elif review.comments:
-                    course_data[10] = review.comments
+                    course_data[10].append(review.comments)
 
 
         if count != 0:         # And remember to calculate the average of the review stars here
@@ -88,33 +87,37 @@ def index(request):
     # Seems like the data is passed as integers. This is fine for now, likely need floats later. --tr
     return render(request,'ratings/index.html',{'course_list_final': course_list_final,
                                                 'searchstring': searchstring,
-                                                'add_review_form': ReviewForm(),})
+                                                'add_review_form': ReviewForm()})
 
 
 
 ####
 # This view adds a new review or updates the old review if the user already had
-# reviewed this course. One review per user/course combination.
+# reviewed this course. A user can review each course only once but may later
+# change the review.
 # Requires the user to be logged in.
+
 @login_required
 def add_review(request):
     if (request.method=='POST'):
         form = ReviewForm(request.POST)
         if form.is_valid():
+            searchstring = "bayes"
             # Find the review if it already exists for this user and course
             old_review = Reviews.objects.filter(user__exact=form.cleaned_data['user'],
                                                 course_id__exact=form.cleaned_data['course_id'])
 
             if (not old_review):
-            
-                new_review = Review(course_id = form.cleaned_data['course_id'],
-                                    user = form.cleaned_data['user'],
-                                    overall = form.cleaned_data['overall'],
-                                    lectures = form.cleaned_data['lectures'],
-                                    assignments = form.cleaned_data['assignments'],
-                                    workload = form.cleaned_data['workload'],
-                                    comments = form.cleaned_data['comments'])
+                new_review = Review()
+                new_review.course_id = form.cleaned_data['course_id']
+                new_review.user = form.cleaned_data['user']
+                new_review.overall = form.cleaned_data['overall']
+                new_review.lectures = form.cleaned_data['lectures']
+                new_review.assignments = form.cleaned_data['assignments']
+                new_review.workload = form.cleaned_data['workload']
+                new_review.comments = form.cleaned_data['comments']
                 new_review.save()
+                
             else: # There was a review already, update its values
                 old_review.course_id = form.cleaned_data['course_id']
                 old_review.user = form.cleaned_data['user']
@@ -125,23 +128,26 @@ def add_review(request):
                 old_review.comments = form.cleaned_data['comments']
                 old_review.save()
         else:
-            # error in submitting the form
+            searchstring = "math"
+            # error in receiving form from template
             pass
     else:
-        form = ReviewForm()
-    return render(request,'ratings/index.html',{'searchstring': form.cleaned_data['searchstring'],
-                                                'form': form})
+        pass
+    return render(request,'/ratings/index.html',{'searchstring': searchstring})
+#    return redirect('/ratings/index.html',{'searchstring': searchstring})
 
 
 
 def loggedin(request):
     if 'login' in request.POST:
-        return render_to_response('ratings/index.html',
-                              {'username': request.user.username})
-        
+        return render_to_response('ratings/loggedin.html',
+                                  {'username': request.user.username})
+
 def logout(request):
     auth_views.logout(request)
     return render(request, 'ratings/index.html')
+
+
 
 def register(request):
     if request.method == 'POST':

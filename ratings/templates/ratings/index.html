@@ -6,7 +6,7 @@
     <div class="center">
         <h1 class="unselectable">Aalto Course Reviewer</h1>
     </div>
-    
+
     <form method="post" action="/ratings/">
         {% csrf_token %}
         <div class="center" id="searchfield">
@@ -16,13 +16,13 @@
                 <input type="text" name="searchstring" placeholder="Searching for: {{searchstring}}">
             {% endif %}
         </div>
-        <div class="center" id="buttonfield">
-            <button class="button submitButton" style="vertical-align:middle" type="submit">
-                <span>Search</span>
-            </button>
+	<div class="center" id="buttonfield">
+          <button class="button submitButton" style="vertical-align:middle" type="submit">
+            <span>Search</span>
+          </button>
         </div>
     </form>
-
+{% comment %}
 <!-- Data is in this structure:  
      course_list_final = [course.id, course.Name, course.Code, course.Year, course.Lecturer, course.myCourses_link,0,0,0,0,[c1,c2,c3...cn],0] 
      course[0-5] = id, name, code, year, lecturer, myCourses_link
@@ -33,7 +33,7 @@
      course[12]  = my_review (overall,lectures,assignments,workload,comment (empty if none)) Review of the current user
 
   -->
-
+{% endcomment %}
 
     <div class="center" id="accordion">
         {% for course in course_list_final %}
@@ -45,79 +45,111 @@
 
         <div>
             <table>
-                <tr><td>Coursecode:</td><td> {{ course.2 }}</td>
-                <tr><td>Start Date:</td><td> {{ course.3 }}</td>
-                <tr><td>Lecturer:</td><td> {{ course.4 }}</td>
-                <tr><td>MyCourses Link:</td><td> {{ course.5 }}</td>
+                <tr><td>Coursecode:</td><td> {{ course.2 }}</td></tr>
+                <tr><td>Start Date:</td><td> {{ course.3 }}</td></tr>
+                <tr><td>Lecturer:</td><td> {{ course.4 }}</td></tr>
+                <tr><td>MyCourses Link:</td><td> {{ course.5 }}</td></tr>
             </table>
+
+	    <form method="POST" action="/ratings/add_review/">
+	      {% csrf_token %}
+	      <input type="hidden" name="course_id" value={{ course.0 }}>
+	      <input type="hidden" name="user" value={{ request.user }}>
             <table>
-                <tr><td>Lectures</td><td>{{ course.7 }}</td><td> - My Review:{{ course.12.0.3 }}
-                <span class="rating">
+    <tr><td>Overall</td><td>{{ course.6 }}</td><td> - My Review:{{ course.12.0.0 }}
+    <span class="rating">
     <input type="radio" class="rating-input"
-        id="rating-input-1-5" name="lectures" value="1" {% if course.7 == "1" %} checked {% endif %}>
+        id="rating-input-1-5" name="overall" value="1" {% if course.12.0.0 == 1 %} checked {% endif %}>
     <label for="rating-input-1-5" class="rating-star"></label>
     <input type="radio" class="rating-input"
-        id="rating-input-1-4" name="lectures" value="2" {% if course.7 == "2" %} checked {% endif %}>
+        id="rating-input-1-4" name="overall" value="2" {% if course.12.0.0 == 2 %} checked {% endif %}>
     <label for="rating-input-1-4" class="rating-star"></label>
     <input type="radio" class="rating-input"
-        id="rating-input-1-3" name="lectures" value="3" {% if course.7 == "3" %} checked {% endif %}>
+        id="rating-input-1-3" name="overall" value="3" {% if course.12.0.0 == 3 %} checked {% endif %}>
     <label for="rating-input-1-3" class="rating-star"></label>
     <input type="radio" class="rating-input"
-        id="rating-input-1-2" name="lectures" value="4" {% if course.7 == "4" %} checked {% endif %}>
+        id="rating-input-1-2" name="overall" value="4" {% if course.12.0.0 == 4 %} checked {% endif %}>
     <label for="rating-input-1-2" class="rating-star"></label>
     <input type="radio" class="rating-input"
-        id="rating-input-1-1" name="lectures" value="5" {% if course.7 == "5" %} checked {% endif %}>
+        id="rating-input-1-1" name="overall" value="5" {% if course.12.0.0 == 5 %} checked {% endif %}>
     <label for="rating-input-1-1" class="rating-star"></label>
-        </span></td>
+    </span></td></tr>
 
-                <tr><td>Assignments</td><td> {{ course.8 }}<td> - My Review:{{ course.12.0.3 }}
-                                    <span class="rating">
+    <tr><td>Lectures</td><td>{{ course.7 }}</td><td> - My Review:{{ course.12.0.1 }}
+    <span class="rating">
     <input type="radio" class="rating-input"
-        id="rating-input-1-5" name="assignments">
+        id="rating-input-1-5" name="lectures" value="1" {% if course.12.0.1 == 1 %} checked {% endif %}>
     <label for="rating-input-1-5" class="rating-star"></label>
     <input type="radio" class="rating-input"
-        id="rating-input-1-4" name="assignments">
+        id="rating-input-1-4" name="lectures" value="2" {% if course.12.0.1 == 2 %} checked {% endif %}>
     <label for="rating-input-1-4" class="rating-star"></label>
     <input type="radio" class="rating-input"
-        id="rating-input-1-3" name="assignments">
+        id="rating-input-1-3" name="lectures" value="3" {% if course.12.0.1 == 3 %} checked {% endif %}>
     <label for="rating-input-1-3" class="rating-star"></label>
     <input type="radio" class="rating-input"
-        id="rating-input-1-2" name="assignments">
+        id="rating-input-1-2" name="lectures" value="4" {% if course.12.0.1 == 4 %} checked {% endif %}>
     <label for="rating-input-1-2" class="rating-star"></label>
     <input type="radio" class="rating-input"
-        id="rating-input-1-1" name="assignments">
+        id="rating-input-1-1" name="lectures" value="5" {% if course.12.0.1 == 5 %} checked {% endif %}>
     <label for="rating-input-1-1" class="rating-star"></label>
-        </span></td>
+        </span></td></tr>
 
-
-                <tr><td>Workload</td><td> {{ course.9 }}<td> - My Review:{{ course.12.0.3 }}
-                <span class="rating">
+    <tr><td>Assignments</td><td> {{ course.8 }}<td> - My Review:{{ course.12.0.2 }}
+    <span class="rating">
     <input type="radio" class="rating-input"
-        id="rating-input-1-5" name="overall">
+        id="rating-input-1-5" name="assignments" value="1" {% if course.12.0.2 == 1 %} checked {% endif %}>
     <label for="rating-input-1-5" class="rating-star"></label>
     <input type="radio" class="rating-input"
-        id="rating-input-1-4" name="overall">
+        id="rating-input-1-4" name="assignments" value="2" {% if course.12.0.2 == 2 %} checked {% endif %}>
     <label for="rating-input-1-4" class="rating-star"></label>
     <input type="radio" class="rating-input"
-        id="rating-input-1-3" name="overall">
+        id="rating-input-1-3" name="assignments" value="3" {% if course.12.0.2 == 3 %} checked {% endif %}>
     <label for="rating-input-1-3" class="rating-star"></label>
     <input type="radio" class="rating-input"
-        id="rating-input-1-2" name="overall">
+        id="rating-input-1-2" name="assignments" value="4" {% if course.12.0.2 == 4 %} checked {% endif %}>
     <label for="rating-input-1-2" class="rating-star"></label>
     <input type="radio" class="rating-input"
-        id="rating-input-1-1" name="overall">
+        id="rating-input-1-1" name="assignments" value="5" {% if course.12.0.2 == 5 %} checked {% endif %}>
     <label for="rating-input-1-1" class="rating-star"></label>
-        </span></td>
+        </span></td></tr>
 
-            </table>
-	    <table>
-            {% for comment in course.10 %}
-            <tr>{{ comment }}</tr>
-            {% endfor %}
-	    <tr><td> My comment: </td><td> {{ course.12.0.4.0 }}</tr>
-	      </table>
-        </div>
-        {% endfor %}
+
+    <tr><td>Workload</td><td> {{ course.9 }}<td> - My Review:{{ course.12.0.3 }}
+    <span class="rating">
+    <input type="radio" class="rating-input"
+        id="rating-input-1-5" name="workload" value="1" {% if course.12.0.3 == 1 %} checked {% endif %}>
+    <label for="rating-input-1-5" class="rating-star"></label>
+    <input type="radio" class="rating-input"
+        id="rating-input-1-4" name="workload" value="2" {% if course.12.0.3 == 2 %} checked {% endif %}>
+    <label for="rating-input-1-4" class="rating-star"></label>
+    <input type="radio" class="rating-input"
+        id="rating-input-1-3" name="workload" value="3" {% if course.12.0.3 == 3 %} checked {% endif %}>
+    <label for="rating-input-1-3" class="rating-star"></label>
+    <input type="radio" class="rating-input"
+        id="rating-input-1-2" name="workload" value="4" {% if course.12.0.3 == 4 %} checked {% endif %}>
+    <label for="rating-input-1-2" class="rating-star"></label>
+    <input type="radio" class="rating-input"
+        id="rating-input-1-1" name="workload" value="5" {% if course.12.0.3 == 5 %} checked {% endif %}>
+    <label for="rating-input-1-1" class="rating-star"></label>
+    </span></td></tr>
+
+    </table>
+	        <h4>Comments:</h4>
+
+      {% for comment in course.10 %}
+    <table>
+      <tr><td>{{ comment }}</td></tr>
+      {% endfor %}
+      {% if user.is_authenticated %}
+      <tr><td> My comment: </td><td><input type="text" name="comments" placeholder="Enter comment" value={{ course.12.0.4.0 }} ></tr>
+      {% endif %}
+    </table>
+
+      <input type="submit" value = "Give Review">
+    
+    </form>
+    </div>
+    {% endfor %}
     </div>
 
 </div>
