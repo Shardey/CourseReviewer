@@ -14,7 +14,6 @@ def index(request):
     # Make a list of courses based on search results and stuff it into course_list.
     
     course_list = []
-    user_review_list = []
     searchstring = []
     
     if (request.method == 'POST'): # We searched for a course
@@ -22,9 +21,9 @@ def index(request):
         if form.is_valid():
             
             searchstring = form.cleaned_data['searchstring']
-            course_list = Course.objects.filter(Q(name__contains=searchstring) | Q(course_code__contains=searchstring) | Q(lecturer__contains=searchstring))
-            if (request.user.is_authenticated):
-                user_review_list = Review.objects.filter(user__exact=request.user)
+            course_list = Course.objects.filter(Q(name__contains=searchstring) |
+                                                Q(course_code__contains=searchstring) |
+                                                Q(lecturer__contains=searchstring))
         else:
             course_list = Course.objects.all()
             
@@ -33,7 +32,9 @@ def index(request):
     ####
     # From Course: id,name,code,year,lecturer,myCourses_link
     # From Review: overall, lectures, assignments, workload into ratings[]
-    # End result: name,code,year,lecturer,myCourses_link,overall,lectures,assignments,workload,comments[], amount_of_reviews
+    # End result: id,name,code,year,lecturer,myCourses_link,overall,lectures,assignments,
+    # workload,comments[], amount_of_reviews,my_review
+    # Where my_comment contains the review of the current user if any
     
     # Because the end result of this system is that there are a lot more reviews
     # than there are courses, the algorithm that runs through the reviews once
@@ -43,9 +44,12 @@ def index(request):
     course_list_final = [] # Init final list of course data along with reviews
     
     for course in course_list:
+
         #initialize the base data and the review counter
-        course_data=[course.id,course.name,course.course_code,course.year,course.lecturer,course.myCourses_link,0,0,0,0,[],0]
+        course_data=[course.id,course.name,course.course_code,course.year,course.lecturer,
+                     course.myCourses_link,0,0,0,0,[],0,[]]
         count = 0
+        my_review = [0,0,0,0,[]]
         
         review_list = Review.objects.filter(course_id__exact=course.id)
         for review in review_list:
@@ -55,8 +59,18 @@ def index(request):
                 course_data[8] += review.assignments
                 course_data[9] += review.workload
                 count += 1
-                if review.comments: # Don't add empty comments to the list
-                    course_data[10].append(review.comments)
+                if request.user == review.user:
+                    my_review[0] = review.overall
+                    my_review[1] = review.lectures
+                    my_review[2] = review.assignments
+                    my_review[3] = review.workload
+
+                    # Comments added only once, either into the general list or the user's list
+                    if review.comments:
+                        my_review[4].append(review.comments)
+                elif review.comments:
+                    course_data[10] = review.comments
+
 
         if count != 0:         # And remember to calculate the average of the review stars here
             course_data[6] /= count
@@ -65,12 +79,13 @@ def index(request):
             course_data[9] /= count
             
         course_data[11] = count
+        course_data[12].append(my_review)
+
         # Add the compiled course data into the final array we want to pass to the template
         course_list_final.append(course_data)
         
     # Seems like the data is passed as integers. This is fine for now, likely need floats later. --tr
     return render(request,'ratings/index.html',{'course_list_final': course_list_final,
-                                                'user_review_list': user_review_list,
                                                 'searchstring': searchstring,
                                                 'add_review_form': ReviewForm()})
 
@@ -85,14 +100,29 @@ def add_review(request):
     if (request.method=='POST'):
         form = ReviewForm(request.POST)
         if form.is_valid():
-            new_review = Review(course_id = form.cleaned_data['course_id'],
-                                user = form.cleaned_data['user'],
-                                overall = form.cleaned_data['overall'],
-                                lectures = form.cleaned_data['lectures'],
-                                assignments = form.cleaned_data['assignments'],
-                                workload = form.cleaned_data['workload'],
-                                comments = form.cleaned_data['comments'])
-            new_review.save()
+            # Find the review if it already exists for this user and course
+            old_review = Reviews.objects.filter(user__exact=form.cleaned_data['user'],
+                                                course_id__exact=form.cleaned_data['course_id'])
+
+            if (not old_review):
+            
+                new_review = Review(course_id = form.cleaned_data['course_id'],
+                                    user = form.cleaned_data['user'],
+                                    overall = form.cleaned_data['overall'],
+                                    lectures = form.cleaned_data['lectures'],
+                                    assignments = form.cleaned_data['assignments'],
+                                    workload = form.cleaned_data['workload'],
+                                    comments = form.cleaned_data['comments'])
+                new_review.save()
+            else: # There was a review already, update its values
+                old_review.course_id = form.cleaned_data['course_id']
+                old_review.user = form.cleaned_data['user']
+                old_review.overall = form.cleaned_data['overall']
+                old_review.lectures = form.cleaned_data['lectures']
+                old_review.assignments = form.cleaned_data['assignments']
+                old_review.workload = form.cleaned_data['workload']
+                old_review.comments = form.cleaned_data['comments']
+                old_review.save()
         else:
             # error in submitting the form
             pass
