@@ -105,33 +105,20 @@ def add_review(request):
         if form.is_valid():
             searchstring = "bayes"
             # Find the review if it already exists for this user and course
-            old_review = Reviews.objects.filter(user__exact=form.cleaned_data['user'],
+            old_review = Reviews.objects.get(user__exact=form.cleaned_data['user'],
                                                 course_id__exact=form.cleaned_data['course_id'])
 
-            if (not old_review):
-                new_review = Review()
-                new_review.course_id = form.cleaned_data['course_id']
-                new_review.user = form.cleaned_data['user']
-                new_review.overall = form.cleaned_data['overall']
-                new_review.lectures = form.cleaned_data['lectures']
-                new_review.assignments = form.cleaned_data['assignments']
-                new_review.workload = form.cleaned_data['workload']
-                new_review.comments = form.cleaned_data['comments']
+            if (old_review):
+                                
+                new_review = ReviewForm(request.POST, instance = old_review)
                 new_review.save()
                 
-            else: # There was a review already, update its values
-                old_review.course_id = form.cleaned_data['course_id']
-                old_review.user = form.cleaned_data['user']
-                old_review.overall = form.cleaned_data['overall']
-                old_review.lectures = form.cleaned_data['lectures']
-                old_review.assignments = form.cleaned_data['assignments']
-                old_review.workload = form.cleaned_data['workload']
-                old_review.comments = form.cleaned_data['comments']
-                old_review.save()
+            else: # Create a new review forthe course
+                new_review = review.save()
+
         else:
             searchstring = "math"
             # error in receiving form from template
-            pass
     else:
         pass
     return render(request,'/ratings/index.html',{'searchstring': searchstring})
