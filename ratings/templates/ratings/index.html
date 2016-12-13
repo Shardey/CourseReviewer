@@ -57,7 +57,8 @@
 	      <input type="hidden" name="user" value={{ request.user }}>
             <table>
     <tr><td>Overall</td><td>{{ course.6 }}</td><td> - My Review:{{ course.12.0.0 }}
-    <span class="rating">
+	<span class="rating">
+	  <input type="hidden" name="overall" value="99">
     <input type="radio" class="rating-input"
         id="rating-input-1-1" name="overall" value="1" {% if course.12.0.0 == 1 %} checked {% endif %}>
     <label for="rating-input-1-1" class="rating-star"></label>
@@ -77,6 +78,7 @@
 
     <tr><td>Lectures</td><td>{{ course.7 }}</td><td> - My Review:{{ course.12.0.1 }}
     <span class="rating">
+	  <input type="hidden" name="lectures" value="99">
     <input type="radio" class="rating-input"
         id="rating-input-1-1" name="lectures" value="1" {% if course.12.0.1 == 1 %} checked {% endif %}>
     <label for="rating-input-1-1" class="rating-star"></label>
@@ -95,7 +97,9 @@
         </span></td></tr>
 
     <tr><td>Assignments</td><td> {{ course.8 }}<td> - My Review:{{ course.12.0.2 }}
-    <span class="rating">
+	<span class="rating">
+	  	  <input type="hidden" name="assignments" value="99">
+
     <input type="radio" class="rating-input"
         id="rating-input-1-1" name="assignments" value="1" {% if course.12.0.2 == 1 %} checked {% endif %}>
     <label for="rating-input-1-1" class="rating-star"></label>
@@ -115,7 +119,9 @@
 
 
     <tr><td>Workload</td><td> {{ course.9 }}<td> - My Review:{{ course.12.0.3 }}
-    <span class="rating">
+	<span class="rating">
+	  	  <input type="hidden" name="workload" value="99">
+	  
     <input type="radio" class="rating-input"
         id="rating-input-1-1" name="workload" value="1" {% if course.12.0.3 == 1 %} checked {% endif %}>
     <label for="rating-input-1-1" class="rating-star"></label>
