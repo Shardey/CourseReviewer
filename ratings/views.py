@@ -6,8 +6,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.template.context_processors import csrf
 from ratings.models import Course, Review
-from ratings.forms import SearchForm, ReviewForm
+from ratings.forms import SearchForm, ReviewForm, UserCreateForm
 from django.db.models import Q
+from django.contrib.auth import views as auth_views
 
 def index(request):
     ####
@@ -157,12 +158,12 @@ def register(request):
             return HttpResponseRedirect('/ratings/register/complete')
 
     else:
-        form = UserCreationForm()
-    token = {}
-    token.update(csrf(request))
-    token['form'] = form
+        form = UserCreateForm()
+        token = {}
+        token.update(csrf(request))
+        token['form'] = form
 
-    return render_to_response('ratings/registration_form.html', token)
+        return render_to_response('ratings/registration_form.html', token)
 
 def registration_complete(request):
     return render_to_response('ratings/registration_complete.html')

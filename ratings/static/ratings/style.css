@@ -4,6 +4,7 @@ body {
     background: #F6F6F6 url("study-background.jpg") no-repeat center top;
     background-attachment: fixed;
     background-size: cover;
+    padding-bottom: 30px;
 }
 
 .navbar {
@@ -105,25 +106,25 @@ input {
     font-size: 140%;
 }
 
-
-  .rating {
+.rating {
       overflow: hidden;
       display: inline-block;
-  }
-  .rating-input {
+}
+.rating-input {
       float: right;
       width: 16px;
       height: 16px;
       padding: 0;
       margin: 0 0 0 -16px;
       opacity: 0;
+}
 
-  }
 .rating:hover .rating-star:hover,
 .rating:hover .rating-star:hover ~ .rating-star,
 .rating-input:checked ~ .rating-star {
     background-position: 0 0;
 }
+
 .rating-star,
 .rating:hover .rating-star {
     position: relative;
@@ -133,7 +134,6 @@ input {
     height: 16px;
     background: url('http://kubyshkin.ru/samples/star-rating/star.png') 0 -16px;
 }
-
 
 .center {
     margin: auto;
@@ -147,7 +147,6 @@ input {
 #buttonfield {
     padding: 20px;
     text-align: center;
-
 }
 
 .submitButton {
@@ -158,6 +157,7 @@ input {
     text-align: center;
     font-size: 28px;
     padding: 20px;
+    margin: 10px 0px;
     width: 200px;
     transition: all 0.5s;
     cursor: pointer;
@@ -191,7 +191,6 @@ input {
 #accordion {
     max-width: 1200px;
     background-color: #FFFFFF;
-    padding: 1px 2px 2px 2px;
     border-radius: 4px;
 }
 
@@ -215,6 +214,16 @@ h2 {
     color: #FFFAFA;
     text-shadow: 2px 2px #2B2B2B;
     font-size: 28px;
+}
+
+.informationForm .helptext {
+    font-size: 10px;
+}
+
+.errorlist {
+    color: #FFFAFA;
+    text-shadow: 1px 1px #2B2B2B;
+    border-right: 5px solid #DE1B1B;
 }
 
 .cancelLink {

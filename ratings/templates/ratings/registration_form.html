@@ -1,13 +1,19 @@
-{% comment %} {% extends "index.html" %}
-{% block title %}Register{% endblock %}
-{% block content %} {% endcomment %}
+{% extends "ratings/base.html" %}
 
-<h2>Registration</h2>
+{% block method_content %}
 
-<form action="/ratings/register/" method="post">{% csrf_token %}
-    {{form.as_p}}
-    <input type="submit" value="Register" />
+<body>
+    <form action="/ratings/register/" method="post" class="informationForm">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="button submitButton" style="vertical-align:middle" type="submit">
+            <span>Register</span>
+        </button>
+    </form>
     
-</form>
+    <div class="cancelLink">
+        <a href="/ratings/">Browse without registering</a>
+    </div>
+</body>
 
-{# {% endblock %} #}
+{% endblock method_content %}

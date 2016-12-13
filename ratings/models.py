@@ -24,4 +24,3 @@ class Review(models.Model):
 
     def __unicode__(self): #What should this return really? Reviews dont have names..
         return unicode(self.course_id) or u''
-
