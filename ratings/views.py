@@ -9,6 +9,7 @@ from ratings.models import Course, Review
 from ratings.forms import SearchForm, ReviewForm, UserCreateForm
 from django.db.models import Q
 from django.contrib.auth import views as auth_views
+import pdb
 
 def index(request):
     ####
@@ -26,15 +27,15 @@ def index(request):
                                                 Q(course_code__contains=searchstring) |
                                                 Q(lecturer__contains=searchstring))
         else:
-            course_list = Course.objects.all()
-            
+#            course_list = Course.objects.all()
+            course_list = Course.objects.filter(name__contains="bayesian")
     
 
     ####
     # From Course: id,name,code,year,lecturer,myCourses_link
     # From Review: overall, lectures, assignments, workload into ratings[]
     # End result: id,name,code,year,lecturer,myCourses_link,overall,lectures,assignments,
-    # workload,comments[], amount_of_reviews,my_review
+    # workload,comments[], amount_of_reviews[] ,my_review
     # Where my_comment contains the review of the current user if any
     
     # Because the end result of this system is that there are a lot more reviews
@@ -47,19 +48,30 @@ def index(request):
     for course in course_list:
 
         #initialize the base data and the review counter
-        course_data=[course.id,course.name,course.course_code,course.year,course.lecturer,
-                     course.myCourses_link,0,0,0,0,[],0,[]]
-        count = 0
-        my_review = [0,0,0,0,[]]
+        course_data=[course.id, course.name, course.course_code, course.year, course.lecturer,
+                     course.myCourses_link,0,0,0,0,[],[],[]]
+        count = [0,0,0,0]
+        my_review = [99,99,99,99,[]]
         
         review_list = Review.objects.filter(course_id__exact=course.id)
         for review in review_list:
             if course.id == review.course_id_id:
-                course_data[6] += review.overall
-                course_data[7] += review.lectures
-                course_data[8] += review.assignments
-                course_data[9] += review.workload
-                count += 1
+                if review.overall != 99:
+                    course_data[6] += review.overall
+                    count[0] += 1
+
+                if review.lectures != 99:
+                    course_data[7] += review.lectures
+                    count[1] += 1
+
+                if review.assignments != 99:
+                    course_data[8] += review.assignments
+                    count[2] += 1
+
+                if review.workload != 99:
+                    course_data[9] += review.workload
+                    count[3] += 1
+                
                 if request.user == review.user:
                     my_review[0] = review.overall
                     my_review[1] = review.lectures
@@ -72,14 +84,17 @@ def index(request):
                 elif review.comments:
                     course_data[10].append(review.comments)
 
-
-        if count != 0:         # And remember to calculate the average of the review stars here
-            course_data[6] /= count
-            course_data[7] /= count
-            course_data[8] /= count
-            course_data[9] /= count
+# And remember to calculate the average of the review stars here
+        if count[0] != 0:         
+            course_data[6] /= count[0]
+        if count[1] != 0:
+            course_data[7] /= count[1]
+        if count[2] != 0:
+            course_data[8] /= count[2]
+        if count[3] != 0:
+            course_data[9] /= count[3]
             
-        course_data[11] = count
+        course_data[11].append(count)
         course_data[12].append(my_review)
 
         # Add the compiled course data into the final array we want to pass to the template
@@ -105,19 +120,21 @@ def add_review(request):
         if form.is_valid():
             searchstring = "bayes"
             # Find the review if it already exists for this user and course
-            old_review = Reviews.objects.get(user__exact=form.cleaned_data['user'],
-                                                course_id__exact=form.cleaned_data['course_id'])
+            old_review = Review.objects.filter(user__exact=form.cleaned_data['user'],
+                                                course_id__exact=form.cleaned_data['course_id']).first()
 
             if (old_review):
-                                
-                new_review = ReviewForm(request.POST, instance = old_review)
-                new_review.save()
+                f = ReviewForm(request.POST, instance=old_review)
+                pdb.set_trace
+                f.save()
                 
-            else: # Create a new review forthe course
-                new_review = review.save()
+            else:
+                f = ReviewForm(request.POST)
+                f.save()
 
         else:
-            searchstring = "math"
+            pass
+            #            searchstring = "math"
             # error in receiving form from template
     else:
         pass
