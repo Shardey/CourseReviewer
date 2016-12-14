@@ -121,7 +121,7 @@ def add_review(request):
             # error in receiving form from template
     else:
         pass
-    return render(request,'/ratings/index.html',{'searchstring': searchstring})
+    return render(request,'ratings/index.html',{'searchstring': searchstring})
 #    return redirect('/ratings/index.html',{'searchstring': searchstring})
 
 
@@ -139,10 +139,10 @@ def logout(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserCreateForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/ratings/register/complete')
+            return HttpResponseRedirect('ratings/register/complete')
 
     else:
         form = UserCreateForm()
