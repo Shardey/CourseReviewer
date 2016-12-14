@@ -9,6 +9,8 @@ from ratings.models import Course, Review
 from ratings.forms import SearchForm, ReviewForm, UserCreateForm
 from django.db.models import Q
 from django.contrib.auth import views as auth_views
+from django.contrib.auth import authenticate
+from django.contrib.auth import login
 import pdb
 
 def index(request):
@@ -158,8 +160,17 @@ def register(request):
     if request.method == 'POST':
         form = UserCreateForm(request.POST)
         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('ratings/register/complete')
+            new_user = form.save()
+            new_user = authenticate(username=form.cleaned_data['username'],
+                                    password=form.cleaned_data['password1'],
+                                    )
+            login(request, new_user)
+            return HttpResponseRedirect("/ratings/")
+        else:
+            args = {}
+            args.update(csrf(request))
+            args['form']= form
+            return render_to_response('ratings/registration_form.html', args)
 
     else:
         form = UserCreateForm()
