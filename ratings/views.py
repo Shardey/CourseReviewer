@@ -4,14 +4,12 @@ from django.shortcuts import render_to_response, render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import views as auth_views
+from django.contrib.auth import authenticate,login
 from django.template.context_processors import csrf
 from ratings.models import Course, Review
 from ratings.forms import SearchForm, ReviewForm, UserCreateForm
 from django.db.models import Q
-from django.contrib.auth import views as auth_views
-from django.contrib.auth import authenticate
-from django.contrib.auth import login
-import pdb
 
 def index(request):
     ####
@@ -61,11 +59,11 @@ def index(request):
                 if review.overall != 99:
                     course_data[6] += review.overall
                     count[0] += 1
-
+                    
                 if review.lectures != 99:
                     course_data[7] += review.lectures
                     count[1] += 1
-
+                        
                 if review.assignments != 99:
                     course_data[8] += review.assignments
                     count[2] += 1
@@ -86,7 +84,7 @@ def index(request):
                 elif review.comments:
                     course_data[10].append(review.comments)
 
-# And remember to calculate the average of the review stars here
+        # And remember to calculate the average of the review stars here
         if count[0] != 0:         
             course_data[6] /= count[0]
         if count[1] != 0:
@@ -95,6 +93,12 @@ def index(request):
             course_data[8] /= count[2]
         if count[3] != 0:
             course_data[9] /= count[3]
+
+        # Round the grades to one decimal
+        course_data[6] = round(course_data[6],1)
+        course_data[7] = round(course_data[7],1)
+        course_data[8] = round(course_data[8],1)
+        course_data[9] = round(course_data[9],1)
             
         course_data[11].append(count)
         course_data[12].append(my_review)
