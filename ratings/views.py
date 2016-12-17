@@ -131,7 +131,6 @@ def add_review(request):
 
             if (old_review):
                 f = ReviewForm(request.POST, instance=old_review)
-                pdb.set_trace
                 f.save()
                 
             else:
