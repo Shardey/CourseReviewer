@@ -215,7 +215,8 @@ h2 {
 }
 
 .radio-input {
-  position: absolute;
+  display: none;
+  position: relative;
   left: 0;
   top: -50px;
 }
@@ -240,13 +241,3 @@ h2 {
   background: url('star.png') 0 -16px;
 }
 
-/*
-.radios.input {
-    display: inline-block;
-    width: 90px;
-    height: 20px;
-    vertical-align: top;
-    padding-top: 40px;
-    float:left
-}
-*/
