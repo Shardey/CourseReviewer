@@ -205,8 +205,43 @@ h2 {
     text-shadow: 2px 2px #2B2B2B;
 }
 
+/*
+* Radiobuttons
+*/
 
-.radiobuttons.input {
+.radio-wrapper {
+  overflow: hidden;
+  display: inline-block;
+}
+
+.radio-input {
+  position: absolute;
+  left: 0;
+  top: -50px;
+}
+
+.radio-star:hover,
+.radio-star:hover ~ .radio-star {
+  background-position: 0 0;
+}
+
+.radio-wrapper:hover .radio-star:hover,
+.radio-wrapper:hover .radio-star:hover ~ .radio-star,
+.radio-input:checked ~ .radio-star {
+  background-position: 0 0;
+}
+
+.radio-star,
+.radio-wrapper:hover .radio-star {
+  float: right;
+  display: block;
+  width: 16px;
+  height: 16px;
+  background: url('star.png') 0 -16px;
+}
+
+/*
+.radios.input {
     display: inline-block;
     width: 90px;
     height: 20px;
@@ -214,4 +249,4 @@ h2 {
     padding-top: 40px;
     float:left
 }
-
+*/
