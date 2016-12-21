@@ -22,6 +22,7 @@
           </button>
         </div>
     </form>
+    
 {% comment %}
 <!-- Data is in this structure:  
      course_list_final = [course.id, course.Name, course.Code, course.Year, course.Lecturer, course.myCourses_link,0,0,0,0,[c1,c2,c3...cn],0] 
@@ -35,151 +36,171 @@
 
     <div class="center" id="accordion">
         {% for course in course_list_final %}
-        <h3>{{ course.1 }} ({{ course.3 }}) <div class="startdate"> Overall Grade: {{ course.6 }} -My Grade- {{ course.12.0.0 }}
-
-
-        </div> </h3>
-
+        <h3>{{ course.1 }} ({{ course.3 }}) 
+            <div class="startdate"> Overall Grade: {{ course.6 }} -My Grade- {{ course.12.0.0 }}</div>
+        </h3>
 
         <div>
-            <table>
-                <tr><td>Coursecode:</td><td> {{ course.2 }}</td></tr>
-                <tr><td>Start Date:</td><td> {{ course.3 }}</td></tr>
-                <tr><td>Lecturer:</td><td> {{ course.4 }}</td></tr>
-                <tr><td>MyCourses Link:</td><td><a href="{{ course.5 }}"> {{ course.5 }}</td></tr>
+            <table id="basicInformation">
+                <tr><td class="infoHeadline">Coursecode:</td><td> {{ course.2 }}</td></tr>
+                <tr><td class="infoHeadline">Start Date:</td><td> {{ course.3 }}</td></tr>
+                <tr><td class="infoHeadline">Lecturer:</td><td> {{ course.4 }}</td></tr>
+                <tr><td class="infoHeadline">MyCourses Link:</td><td><a href="{{ course.5 }}"> {{ course.5 }}</td></tr>
             </table>
 
-	    <form method="POST" action="/ratings/add_review/">
-	      {% csrf_token %}
-	      <input type="hidden" name="course_id" value={{ course.0 }}>
-	      <input type="hidden" name="user" value={{ request.user.id }}>
-            <table>
-	      <tr><td>Overall</td><td>{{ course.6 }}</td>
+	        <form method="POST" action="/ratings/add_review/">
+            {% csrf_token %}
+            <input type="hidden" name="course_id" value={{ course.0 }}>
+            <input type="hidden" name="user" value={{ request.user.id }}>
+            <table>    
+                <tr>
+                    <td><h4 class="rowHeadline">Ratings:</h4></td>
+                    <td></td>
+                    <td id="myRatingsHeadline"><h4>My rating:</h4></td>
+                </tr>
+                <tr class="categoryRow">
+                    <td class="categoryHeadline">Overall:</td>
+                    <td class="categoryPoints">{{ course.6 }}</td>
+
+                    {% if request.user.is_authenticated %}
+                
+                    <td><input type="hidden" name="overall" value="99">
+
+                    <fieldset>
+                    <div class="radio-wrapper">
+                        <input type="radio" class="radio-input" id="{{ course.0 }}-radio-input-1-5" name="overall" value="5" {% if course.12.0.0 == 5 %} checked {% endif %}>
+                        <label for="{{ course.0 }}-radio-input-1-5" class="radio-star"></label>
+    
+                        <input type="radio" class="radio-input" id="{{ course.0 }}-radio-input-1-4" name="overall" value="4" {% if course.12.0.0 == 4 %} checked {% endif %}>
+                        <label for="{{ course.0 }}-radio-input-1-4" class="radio-star"></label>
+    
+                        <input type="radio" class="radio-input" id="{{ course.0 }}-radio-input-1-3" name="overall" value="3" {% if course.12.0.0 == 3 %} checked {% endif %}>
+                        <label for="{{ course.0 }}-radio-input-1-3" class="radio-star"></label>
+    
+                        <input type="radio" class="radio-input" id="{{ course.0 }}-radio-input-1-2" name="overall" value="2" {% if course.12.0.0 == 2 %} checked {% endif %}>
+                        <label for="{{ course.0 }}-radio-input-1-2" class="radio-star"></label>
+    
+                        <input type="radio" class="radio-input" id="{{ course.0 }}-radio-input-1-1" name="overall" value="1" {% if course.12.0.0 == 1 %} checked {% endif %}>
+                        <label for="{{ course.0 }}-radio-input-1-1" class="radio-star"></label>
+                    </div>
+                    </fieldset>
+                    </td>
+                    {% endif %}
+                </tr>
+
+                <tr class="categoryRow">
+                    <td class="categoryHeadline">Lectures:</td>
+                    <td class="categoryPoints">{{ course.7 }}</td>
 		
-		{% if request.user.is_authenticated %} 
-		<td>
-		  <input type="hidden" name="overall" value="99">
-
-		  <fieldset>
-		    <div class="radio-wrapper">
-		      <input type="radio" class="radio-input" id="{{ course.0 }}-radio-input-1-5" name="overall" value="5" {% if course.12.0.0 == 5 %} checked {% endif %}>
-		      <label for="{{ course.0 }}-radio-input-1-5" class="radio-star"></label>
-
-		      <input type="radio" class="radio-input" id="{{ course.0 }}-radio-input-1-4" name="overall" value="4" {% if course.12.0.0 == 4 %} checked {% endif %}>
-		      <label for="{{ course.0 }}-radio-input-1-4" class="radio-star"></label>
-
-		      <input type="radio" class="radio-input" id="{{ course.0 }}-radio-input-1-3" name="overall" value="3" {% if course.12.0.0 == 3 %} checked {% endif %}>
-		      <label for="{{ course.0 }}-radio-input-1-3" class="radio-star"></label>
-
-		      <input type="radio" class="radio-input" id="{{ course.0 }}-radio-input-1-2" name="overall" value="2" {% if course.12.0.0 == 2 %} checked {% endif %}>
-		      <label for="{{ course.0 }}-radio-input-1-2" class="radio-star"></label>
-
-		      <input type="radio" class="radio-input" id="{{ course.0 }}-radio-input-1-1" name="overall" value="1" {% if course.12.0.0 == 1 %} checked {% endif %}>
-		      <label for="{{ course.0 }}-radio-input-1-1" class="radio-star"></label>
-
-		    </div>
-		  </fieldset>
-	      </td></tr>
-	      {% endif %}
+                    {% if request.user.is_authenticated %}
+                    	
+                    <td><input type="hidden" name="lectures" value="99">
+                    
+                    <fieldset>
+                    <div class="radio-wrapper">
+                        <input type="radio" class="radio-input" id="{{ course.0 }}-2-radio-input-1-5" name="lectures" value="5" {% if course.12.0.1 == 5 %} checked {% endif %}>
+                        <label for="{{ course.0 }}-2-radio-input-1-5" class="radio-star"></label>
+                
+                        <input type="radio" class="radio-input" id="{{ course.0 }}-2-radio-input-1-4" name="lectures" value="4" {% if course.12.0.1 == 4 %} checked {% endif %}>
+                        <label for="{{ course.0 }}-2-radio-input-1-4" class="radio-star"></label>
+                
+                        <input type="radio" class="radio-input" id="{{ course.0 }}-2-radio-input-1-3" name="lectures" value="3" {% if course.12.0.1 == 3 %} checked {% endif %}>
+                        <label for="{{ course.0 }}-2-radio-input-1-3" class="radio-star"></label>
+                
+                        <input type="radio" class="radio-input" id="{{ course.0 }}-2-radio-input-1-2" name="lectures" value="2" {% if course.12.0.1 == 2 %} checked {% endif %}>
+                        <label for="{{ course.0 }}-2-radio-input-1-2" class="radio-star"></label>
+                
+                        <input type="radio" class="radio-input" id="{{ course.0 }}-2-radio-input-1-1" name="lectures" value="1" {% if course.12.0.1 == 1 %} checked {% endif %}>
+                        <label for="{{ course.0 }}-2-radio-input-1-1" class="radio-star"></label>
+                    </div>
+                    </fieldset>
+                    </td>
+                    {% endif %}
+                </tr>
+                
+                <tr class="categoryRow">
+                    <td class="categoryHeadline">Assignments:</td>
+                    <td class="categoryPoints"> {{ course.8 }}</td>
+                    
+                    {% if request.user.is_authenticated %} 
+                    
+                    <td><input type="hidden" name="assignments" value="99">
+                    
+                    <fieldset>
+                    <div class="radio-wrapper">
+                        <input type="radio" class="radio-input" id="{{ course.0 }}-3-radio-input-1-5" name="assignments" value="5" {% if course.12.0.1 == 5 %} checked {% endif %}>
+                        <label for="{{ course.0 }}-3-radio-input-1-5" class="radio-star"></label>
+                    
+                        <input type="radio" class="radio-input" id="{{ course.0 }}-3-radio-input-1-4" name="assignments" value="4" {% if course.12.0.1 == 4 %} checked {% endif %}>
+                        <label for="{{ course.0 }}-3-radio-input-1-4" class="radio-star"></label>
+                    
+                        <input type="radio" class="radio-input" id="{{ course.0 }}-3-radio-input-1-3" name="assignments" value="3" {% if course.12.0.1 == 3 %} checked {% endif %}>
+                        <label for="{{ course.0 }}-3-radio-input-1-3" class="radio-star"></label>
+                    
+                        <input type="radio" class="radio-input" id="{{ course.0 }}-3-radio-input-1-2" name="assignments" value="2" {% if course.12.0.1 == 2 %} checked {% endif %}>
+                        <label for="{{ course.0 }}-3-radio-input-1-2" class="radio-star"></label>
+                    
+                        <input type="radio" class="radio-input" id="{{ course.0 }}-3-radio-input-1-1" name="assignments" value="1" {% if course.12.0.1 == 1 %} checked {% endif %}>
+                        <label for="{{ course.0 }}-3-radio-input-1-1" class="radio-star"></label>
+                    </div>
+                    </fieldset>
+                    </td>
+                    {% endif %}
+                </tr>
 	      
-	      <tr><td>Lectures</td><td>{{ course.7 }}</td>
-		
-		{% if request.user.is_authenticated %} 		
-		<td>
-		  <input type="hidden" name="lectures" value="99">
-		  <fieldset>
-		    <div class="radio-wrapper">
-		      <input type="radio" class="radio-input" id="{{ course.0 }}-2-radio-input-1-5" name="lectures" value="5" {% if course.12.0.1 == 5 %} checked {% endif %}>
-		      <label for="{{ course.0 }}-2-radio-input-1-5" class="radio-star"></label>
+                <tr class="categoryRow">
+                    <td class="categoryHeadline">Workload:</td>
+                    <td class="categoryPoints"> {{ course.9 }}</td>
+                    
+                    {% if request.user.is_authenticated %} 
+                    
+                    <td><input type="hidden" name="workload" value="99">
+                    
+                    <fieldset>
+                    <div class="radio-wrapper">
+                        <input type="radio" class="radio-input" id="{{ course.0 }}-4-radio-input-1-5" name="workload" value="5" {% if course.12.0.1 == 5 %} checked {% endif %}>
+                        <label for="{{ course.0 }}-4-radio-input-1-5" class="radio-star"></label>
+                    
+                        <input type="radio" class="radio-input" id="{{ course.0 }}-4-radio-input-1-4" name="workload" value="4" {% if course.12.0.1 == 4 %} checked {% endif %}>
+                        <label for="{{ course.0 }}-4-radio-input-1-4" class="radio-star"></label>
+                    
+                        <input type="radio" class="radio-input" id="{{ course.0 }}-4-radio-input-1-3" name="workload" value="3" {% if course.12.0.1 == 3 %} checked {% endif %}>
+                        <label for="{{ course.0 }}-4-radio-input-1-3" class="radio-star"></label>
+                    
+                        <input type="radio" class="radio-input" id="{{ course.0 }}-4-radio-input-1-2" name="workload" value="2" {% if course.12.0.1 == 2 %} checked {% endif %}>
+                        <label for="{{ course.0 }}-4-radio-input-1-2" class="radio-star"></label>
+                    
+                        <input type="radio" class="radio-input" id="{{ course.0 }}-4-radio-input-1-1" name="workload" value="1" {% if course.12.0.1 == 1 %} checked {% endif %}>
+                        <label for="{{ course.0 }}-4-radio-input-1-1" class="radio-star"></label>
+                </div>
+                </fieldset>
+                </td>
+                {% endif %}
+                </tr>
 
-		      <input type="radio" class="radio-input" id="{{ course.0 }}-2-radio-input-1-4" name="lectures" value="4" {% if course.12.0.1 == 4 %} checked {% endif %}>
-		      <label for="{{ course.0 }}-2-radio-input-1-4" class="radio-star"></label>
-
-		      <input type="radio" class="radio-input" id="{{ course.0 }}-2-radio-input-1-3" name="lectures" value="3" {% if course.12.0.1 == 3 %} checked {% endif %}>
-		      <label for="{{ course.0 }}-2-radio-input-1-3" class="radio-star"></label>
-
-		      <input type="radio" class="radio-input" id="{{ course.0 }}-2-radio-input-1-2" name="lectures" value="2" {% if course.12.0.1 == 2 %} checked {% endif %}>
-		      <label for="{{ course.0 }}-2-radio-input-1-2" class="radio-star"></label>
-
-		      <input type="radio" class="radio-input" id="{{ course.0 }}-2-radio-input-1-1" name="lectures" value="1" {% if course.12.0.1 == 1 %} checked {% endif %}>
-		      <label for="{{ course.0 }}-2-radio-input-1-1" class="radio-star"></label>
-		    </div>
-		  </fieldset>
-	      </td></tr>
-	      {% endif %}
-	      
-	      <tr><td>Assignments</td><td> {{ course.8 }}</td>
-		{% if request.user.is_authenticated %} 
-		<td>
-		  <input type="hidden" name="assignments" value="99">
-		  <fieldset>
-		    <div class="radio-wrapper">
-		      <input type="radio" class="radio-input" id="{{ course.0 }}-3-radio-input-1-5" name="assignments" value="5" {% if course.12.0.1 == 5 %} checked {% endif %}>
-		      <label for="{{ course.0 }}-3-radio-input-1-5" class="radio-star"></label>
-
-		      <input type="radio" class="radio-input" id="{{ course.0 }}-3-radio-input-1-4" name="assignments" value="4" {% if course.12.0.1 == 4 %} checked {% endif %}>
-		      <label for="{{ course.0 }}-3-radio-input-1-4" class="radio-star"></label>
-
-		      <input type="radio" class="radio-input" id="{{ course.0 }}-3-radio-input-1-3" name="assignments" value="3" {% if course.12.0.1 == 3 %} checked {% endif %}>
-		      <label for="{{ course.0 }}-3-radio-input-1-3" class="radio-star"></label>
-
-		      <input type="radio" class="radio-input" id="{{ course.0 }}-3-radio-input-1-2" name="assignments" value="2" {% if course.12.0.1 == 2 %} checked {% endif %}>
-		      <label for="{{ course.0 }}-3-radio-input-1-2" class="radio-star"></label>
-
-		      <input type="radio" class="radio-input" id="{{ course.0 }}-3-radio-input-1-1" name="assignments" value="1" {% if course.12.0.1 == 1 %} checked {% endif %}>
-		      <label for="{{ course.0 }}-3-radio-input-1-1" class="radio-star"></label>
-		    </div>
-		  </fieldset>
-	      </td></tr>
-	      {% endif %}
-	      
-	      
-	      <tr><td>Workload</td><td> {{ course.9 }}</td>
-		{% if request.user.is_authenticated %} 
-		<td>
-		  <input type="hidden" name="workload" value="99">
-		  <fieldset>
-		    <div class="radio-wrapper">
-		      <input type="radio" class="radio-input" id="{{ course.0 }}-4-radio-input-1-5" name="workload" value="5" {% if course.12.0.1 == 5 %} checked {% endif %}>
-		      <label for="{{ course.0 }}-4-radio-input-1-5" class="radio-star"></label>
-
-		      <input type="radio" class="radio-input" id="{{ course.0 }}-4-radio-input-1-4" name="workload" value="4" {% if course.12.0.1 == 4 %} checked {% endif %}>
-		      <label for="{{ course.0 }}-4-radio-input-1-4" class="radio-star"></label>
-
-		      <input type="radio" class="radio-input" id="{{ course.0 }}-4-radio-input-1-3" name="workload" value="3" {% if course.12.0.1 == 3 %} checked {% endif %}>
-		      <label for="{{ course.0 }}-4-radio-input-1-3" class="radio-star"></label>
-
-		      <input type="radio" class="radio-input" id="{{ course.0 }}-4-radio-input-1-2" name="workload" value="2" {% if course.12.0.1 == 2 %} checked {% endif %}>
-		      <label for="{{ course.0 }}-4-radio-input-1-2" class="radio-star"></label>
-
-		      <input type="radio" class="radio-input" id="{{ course.0 }}-4-radio-input-1-1" name="workload" value="1" {% if course.12.0.1 == 1 %} checked {% endif %}>
-		      <label for="{{ course.0 }}-4-radio-input-1-1" class="radio-star"></label>
-		    </div>
-		  </fieldset>
-	      </td></tr>
-	      	      {% endif %}
-
-	    </table>
-	    <h4>Comments:</h4>
+            </table>
+	       
+    	    <h4 class="rowHeadline">Reviews:</h4>
+    	    
+    	    <table id="commentTable">
+        	    {% for comment in course.10 %}
+                    <tr class="commentRow"><td class="presentedComment">{{ comment }}</td></tr>    
+                {% endfor %}
+                
+                {% if user.is_authenticated %}
+                    <tr><td>
+                        <input type="text" name="comments" placeholder="Enter comment" value="{{ course.12.0.4.0 }}" >
+                    </td></tr>
+                    <tr><td>
+                        <input class="submitbutton" type="submit" value = "Give Review">
+                    </td></tr>
+                {% endif %}
+            </table>
 	    
-	    {% for comment in course.10 %}
-	    <table>
-	      <tr><td>{{ comment }}</td></tr>
-	      {% endfor %}
-	      {% if user.is_authenticated %}
-	      <tr><td><input type="text" name="comments" placeholder="Enter comment" value="{{ course.12.0.4.0 }}" ></td></tr>
-	      {% endif %}
-	    
-	    {% if user.is_authenticated %}
-	      <tr><td><input class="submitbutton" type="submit" value = "Give Review"></td></tr>
-	    {% endif %}
-	    </table>
-	    
-	    </form>
-	</div>
+            </form>
+        </div>
 	{% endfor %}
     </div>
-    
 </div>
 
 {% endblock method_content %}

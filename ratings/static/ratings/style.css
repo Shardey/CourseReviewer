@@ -1,3 +1,17 @@
+/*
+
+Navigation bar background: #232f3e
+
+Action button green: #4ab8a1
+Action button dark green: #43a691
+
+Different grays:
+Light: #f3f3f3
+Medium: #cccccc
+Dark: 
+
+
+*/
 
 body {
     font-family: 'Catamaran', sans-serif;
@@ -79,19 +93,12 @@ a, a:visited, a:hover, a:active {
     float: right;
 }
 
-#logout {
-    background-color: #febd69;
-    color: #232f3e;
-}
-
-#register {
+#logout, #register {
     background-color: #4ab8a1;
-    color: #232f3e;
 }
 
 #login {
     background-color: #f3f3f3;
-    color: #232f3e;
 }
 
 #homePage {
@@ -117,6 +124,7 @@ a, a:visited, a:hover, a:active {
     text-align: center;    
     border: 1px solid;
     border-radius: 4px;
+    font-family: inherit;
     font-size: 140%;
     height: 50px;
 }
@@ -138,10 +146,10 @@ a, a:visited, a:hover, a:active {
     display: inline-block;
     border-radius: 4px;
     background-color: #4ab8a1;
-    color: #232f3e;
     text-align: center;
+    font-family: inherit;
     font-size: 28px;
-    padding: 20px;
+    padding: 13px;
     margin: 10px 0px;
     width: 200px;
     transition: all 0.5s;
@@ -173,20 +181,9 @@ a, a:visited, a:hover, a:active {
   right: 0;
 }
 
-#accordion {
-    max-width: 1200px;
-    background-color: #f3f3f3;
-    border-radius: 4px;
-}
-
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
-    background: #4ab8a1;
-    border-color: #43a691;
-}
-
-h2 {
-    color: #232f3e
-}
+/*
+Log in and registration
+*/
 
 .informationForm {
     text-align: center;
@@ -219,35 +216,111 @@ h2 {
     text-align: center;
     padding-top: 35px;
     font-size: 17px;
-    color: #FFFAFA;
+    color: #f3f3f3;
     text-shadow: 2px 2px #232f3e;
 }
 
 /*
-* Radiobuttons
+Course listing accordion
+*/
+
+#accordion {
+    max-width: 1200px;
+    border-radius: 4px;
+}
+
+.ui-widget {
+    font-family: inherit;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+    background: #4ab8a1;
+    
+}
+
+.ui-accordion-header, .ui-widget-content {
+    color: #000;
+    border-color: #232f3e;
+}
+
+/*
+Course information tables
+*/
+
+#basicInformation {
+    margin-bottom: 15px;
+}
+
+#basicInformation tr td a {
+    color: blue;
+}
+
+.rowHeadline {
+    margin: 13px 0px;
+}
+
+.infoHeadline {
+    min-width: 150px;
+}
+
+#myRatingsHeadline {
+    padding-left: 33px;
+}
+
+.categoryRow {
+    height: 43px;
+}
+
+.infoHeadline, .categoryHeadline, .presentedComment {
+    padding-left: 10px;
+}
+
+.categoryHeadline {
+    min-width: 130px;
+}
+
+.categoryPoints {
+    text-align: center;
+    width: 41px;
+    height: 41px;
+    background: url('scoreBackground.png');
+    background-size: 41px 41px;
+    background-repeat: no-repeat;
+}
+
+/*
+Radiobuttons
 */
 
 .radio-wrapper {
   overflow: hidden;
   display: inline-block;
+  border: none; 
+  vertical-align: middle;
+  margin-left: 30px;
+}
+
+fieldset {
+    border: none;
 }
 
 .radio-input {
   display: none;
   position: relative;
   left: 0;
-  top: -50px;
 }
 
 .radio-star:hover,
 .radio-star:hover ~ .radio-star {
   background-position: 0 0;
+  cursor: pointer;
 }
 
 .radio-wrapper:hover .radio-star:hover,
 .radio-wrapper:hover .radio-star:hover ~ .radio-star,
 .radio-input:checked ~ .radio-star {
   background-position: 0 0;
+  cursor: pointer;
 }
 
 .radio-star,
@@ -257,5 +330,22 @@ h2 {
   width: 16px;
   height: 16px;
   background: url('star.png') 0 -16px;
+  cursor: pointer;
 }
 
+/*
+Comments
+*/
+
+#commentTable {
+    border-spacing: 15px;
+    padding-top: 0px;
+}
+
+.commentRow {
+    margin-bottom: 10px;
+}
+
+.presentedComment {
+    border-bottom: dotted #4ab8a1;
+}
