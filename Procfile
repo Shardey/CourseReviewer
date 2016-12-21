@@ -1,1 +1,1 @@
-web: gunicorn courserating.wsgi
+web: gunicorn courserating.wsgi --preload 
