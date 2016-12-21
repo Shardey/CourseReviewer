@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 
-# Heroku stuff begin
+#######
+# HEROKU stuff begin
 
 import dj_database_url
 
@@ -20,6 +21,8 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
+
+ALLOWED_HOSTS = ['*']
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
@@ -33,11 +36,9 @@ STATICFILES_DIRS = (
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
+# HEROKU stuff end
+#######
 
-
-
-# Heroku stuff end
- 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -108,8 +109,10 @@ DATABASES = {
 }
 
 # Heroku start
+
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
+
 # Heroku end
 
 
