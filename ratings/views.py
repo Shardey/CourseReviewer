@@ -27,8 +27,7 @@ def index(request):
                                                 Q(course_code__contains=searchstring) |
                                                 Q(lecturer__contains=searchstring))
         else:
-#            course_list = Course.objects.all()
-            course_list = Course.objects.filter(name__contains="bayesian")
+            course_list = Course.objects.all()
     
 
     ####
@@ -108,8 +107,7 @@ def index(request):
         
     # Seems like the data is passed as integers. This is fine for now, likely need floats later. --tr
     return render(request,'ratings/index.html',{'course_list_final': course_list_final,
-                                                'searchstring': searchstring,
-                                                'add_review_form': ReviewForm()})
+                                                'searchstring': searchstring})
 
 
 
