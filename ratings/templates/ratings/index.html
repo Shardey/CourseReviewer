@@ -11,9 +11,9 @@
         {% csrf_token %}
         <div class="center" id="searchfield">
             {% if not searchstring %}
-                <input type="text" name="searchstring" placeholder="Courses, lecturers or course codes">
+                <input id="searchinput" type="text" name="searchstring" placeholder="Courses, lecturers or course codes">
             {% else %}
-                <input type="text" name="searchstring" placeholder="Searching for: {{searchstring}}">
+                <input id="searchedinput" type="text" name="searchstring" placeholder="Searching for: {{searchstring}}">
             {% endif %}
         </div>
 	<div class="center" id="buttonfield">
@@ -46,7 +46,7 @@
                 <tr><td>Coursecode:</td><td> {{ course.2 }}</td></tr>
                 <tr><td>Start Date:</td><td> {{ course.3 }}</td></tr>
                 <tr><td>Lecturer:</td><td> {{ course.4 }}</td></tr>
-                <tr><td>MyCourses Link:</td><td> {{ course.5 }}</td></tr>
+                <tr><td>MyCourses Link:</td><td><a href="{{ course.5 }}"> {{ course.5 }}</td></tr>
             </table>
 
 	    <form method="POST" action="/ratings/add_review/">

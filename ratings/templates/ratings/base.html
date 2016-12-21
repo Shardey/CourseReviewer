@@ -23,13 +23,17 @@
     </script>
   
     <link href="https://fonts.googleapis.com/css?family=Catamaran" rel="stylesheet"> 
+    
+    <link rel="icon" type="image/png" href="{% static 'ratings/favicon-32x32.png' %}" sizes="32x32" />
+    <link rel="icon" type="image/png" href="{% static 'ratings/favicon-16x16.png' %}" sizes="16x16" />
+
 </head>
 
 <body>
 
 <div class="navbar">
 <ul>
-    <li id="homePage"><a href="/ratings/">Home page</a></li>
+    <li id="homePage"><a href="/ratings/"><img id="homeImage" src="{% static 'ratings/acrLogo.png' %}"></a></li>
     
     {% if request.user.is_authenticated %}
         <li class="userAction" id="logout"><a href="/ratings/logout">logout</a></li>
