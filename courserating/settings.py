@@ -22,8 +22,6 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
 
-ALLOWED_HOSTS = ['*']
-
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, '../ratings/static'),
@@ -52,7 +50,7 @@ SECRET_KEY = 'k+d3v3x(d7fo0oxey)=xy)7v3oebx&rn*xjik%45w8@m!e&&s!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
