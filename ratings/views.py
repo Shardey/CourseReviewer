@@ -166,7 +166,7 @@ def register(request):
                                     password=form.cleaned_data['password1'],
                                     )
             login(request, new_user)
-            return HttpResponseRedirect("/ratings/")
+            return render(request, 'ratings/index.html')
         else:
             args = {}
             args.update(csrf(request))
