@@ -122,7 +122,6 @@ def add_review(request):
     if (request.method=='POST'):
         form = ReviewForm(request.POST)
         if form.is_valid():
-            searchstring = "bayes"
             # Find the review if it already exists for this user and course
             old_review = Review.objects.filter(user__exact=form.cleaned_data['user'],
                                                 course_id__exact=form.cleaned_data['course_id']).first()
@@ -141,7 +140,7 @@ def add_review(request):
             # error in receiving form from template
     else:
         pass
-    return render(request,'ratings/index.html',{'searchstring': searchstring})
+    return render(request,'ratings/index.html')
 #    return redirect('/ratings/index.html',{'searchstring': searchstring})
 
 

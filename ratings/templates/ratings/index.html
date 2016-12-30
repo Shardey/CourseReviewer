@@ -36,8 +36,8 @@
 
     <div class="center" id="accordion">
         {% for course in course_list_final %}
-        <h3>{{ course.1 }} ({{ course.3 }}) 
-            <div class="startdate"> Overall Grade: {{ course.6 }} -My Grade- {{ course.12.0.0 }}</div>
+        <h3>{{ course.1 }} 
+            <div class="gradeHeadline">Overall Grade: <div class="gradeNumber">{{ course.6 }}</div></div>
         </h3>
 
         <div>
@@ -55,8 +55,10 @@
             <table>    
                 <tr>
                     <td><h4 class="rowHeadline">Ratings:</h4></td>
+                    {% if request.user.is_authenticated %}
                     <td></td>
                     <td id="myRatingsHeadline"><h4>My rating:</h4></td>
+                    {% endif %}
                 </tr>
                 <tr class="categoryRow">
                     <td class="categoryHeadline">Overall:</td>
@@ -183,18 +185,18 @@
     	    <h4 class="rowHeadline">Reviews:</h4>
     	    
     	    <table id="commentTable">
-        	    {% for comment in course.10 %}
-                    <tr class="commentRow"><td class="presentedComment">{{ comment }}</td></tr>    
-                {% endfor %}
-                
                 {% if user.is_authenticated %}
                     <tr><td>
-                        <input type="text" name="comments" placeholder="Enter comment" value="{{ course.12.0.4.0 }}" >
+                        <input type="text" id="commentinput" name="comments" placeholder="Enter comment" value="{{ course.12.0.4.0 }}" >
                     </td></tr>
                     <tr><td>
-                        <input class="submitbutton" type="submit" value = "Give Review">
+                        <input class="submitButton" type="submit" value = "Give Review">
                     </td></tr>
                 {% endif %}
+                
+                {% for comment in course.10 %}
+                    <tr class="commentRow"><td class="presentedComment">{{ comment }}</td></tr>    
+                {% endfor %}
             </table>
 	    
             </form>
