@@ -303,6 +303,10 @@ Course information tables
     background-repeat: no-repeat;
 }
 
+.ratingGuidelines {
+    padding-left: 20px;
+}
+
 /*
 Radiobuttons
 */
